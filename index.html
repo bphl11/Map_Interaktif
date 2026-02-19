@@ -1,20 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>WebGIS PBPH & Kawasan Hutan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body { margin:0; font-family: Arial, sans-serif; }
+#map { height:100vh; }
+
+.filter-box {
+    position:absolute;
+    top:10px;
+    left:60px;
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    z-index:1000;
+}
+
+.legend {
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    line-height:18px;
+    font-size:13px;
+}
+
+.legend i {
+    width:15px;
+    height:15px;
+    float:left;
+    margin-right:6px;
+    opacity:0.7;
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="filter-box">
+<b>Filter Kawasan Hutan</b><br>
+<select id="filterF2025">
+<option value="ALL">Semua</option>
+<option value="HL">HL</option>
+<option value="HP">HP</option>
+<option value="HPT">HPT</option>
+<option value="HPK">HPK</option>
+</select>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
 
 // =======================
 // BASEMAP
 // =======================
 
-var map = L.map('map').setView([-3.3,114.6],7);
+var map = L.map('map', {
+    zoomControl:true,
+    attributionControl:true
+}).setView([-3.3,114.6],7);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Untuk menyimpan layer yang sedang aktif
 var selectedLayer = null;
 
 // =======================
-// STYLE FUNCTIONS
+// STYLE
 // =======================
 
 function stylePBPH(){
@@ -28,8 +89,6 @@ function stylePBPH(){
 
 function styleKawasan(feature){
 
-    var kategori = feature.properties.F2025;
-
     var warna = {
         "HL":"#1b5e20",
         "HP":"#43a047",
@@ -40,31 +99,28 @@ function styleKawasan(feature){
     return {
         color:"#2e7d32",
         weight:1,
-        fillColor:warna[kategori] || "#999",
+        fillColor:warna[feature.properties?.F2025] || "#999",
         fillOpacity:0.6
     };
 }
 
 // =======================
-// FUNCTION HIGHLIGHT
+// HIGHLIGHT + ZOOM
 // =======================
 
 function highlightFeature(layer){
 
-    // Reset layer sebelumnya
     if(selectedLayer){
-        if(selectedLayer.defaultStyle){
-            selectedLayer.setStyle(selectedLayer.defaultStyle);
-        }
+        selectedLayer.setStyle(selectedLayer.originalStyle);
     }
 
-    // Simpan style asli
-    layer.defaultStyle = {
+    layer.originalStyle = {
         color: layer.options.color,
-        weight: layer.options.weight
+        weight: layer.options.weight,
+        fillColor: layer.options.fillColor,
+        fillOpacity: layer.options.fillOpacity
     };
 
-    // Set highlight
     layer.setStyle({
         weight:4,
         color:"#000000"
@@ -72,26 +128,29 @@ function highlightFeature(layer){
 
     selectedLayer = layer;
 
-    // Zoom halus
-    map.fitBounds(layer.getBounds(),{
+    map.flyToBounds(layer.getBounds(),{
         padding:[40,40],
         duration:0.8
     });
 }
 
 // =======================
-// LAYER PBPH
+// PBPH LAYER
 // =======================
 
 var pbphLayer = L.geoJSON(null,{
     style:stylePBPH,
     onEachFeature:function(feature,layer){
 
+        var luas = feature.properties?.LUAS
+            ? Number(feature.properties.LUAS).toLocaleString()
+            : "0";
+
         layer.bindPopup(
-            "<b>"+feature.properties.NAMOBJ+"</b><br>"+
-            "Status: "+feature.properties.STAT_IZIN+"<br>"+
-            "Jenis: "+feature.properties.JENIS+"<br>"+
-            "Luas: "+Number(feature.properties.LUAS).toLocaleString()+" Ha"
+            "<b>"+(feature.properties?.NAMOBJ || "-")+"</b><br>"+
+            "Status: "+(feature.properties?.STAT_IZIN || "-")+"<br>"+
+            "Jenis: "+(feature.properties?.JENIS || "-")+"<br>"+
+            "Luas: "+luas+" Ha"
         );
 
         layer.on("click",function(){
@@ -101,24 +160,29 @@ var pbphLayer = L.geoJSON(null,{
     }
 }).addTo(map);
 
-fetch("pbph.geojson")
+fetch("./pbph.geojson")
 .then(res=>res.json())
 .then(data=>{
     pbphLayer.addData(data);
-});
+})
+.catch(err=>console.error("PBPH error:",err));
 
 // =======================
-// LAYER KAWASAN HUTAN
+// KAWASAN HUTAN LAYER
 // =======================
 
 var kawasanLayer = L.geoJSON(null,{
     style:styleKawasan,
     onEachFeature:function(feature,layer){
 
+        var luas = feature.properties?.LUAS
+            ? Number(feature.properties.LUAS).toLocaleString()
+            : "0";
+
         layer.bindPopup(
             "<b>Kawasan Hutan</b><br>"+
-            "Kabupaten: "+(feature.properties.KABUPATEN || "-")+"<br>"+
-            "Luas: "+Number(feature.properties.LUAS).toLocaleString()+" Ha"
+            "Kabupaten: "+(feature.properties?.KABUPATEN || "-")+"<br>"+
+            "Luas: "+luas+" Ha"
         );
 
         layer.on("click",function(){
@@ -128,14 +192,15 @@ var kawasanLayer = L.geoJSON(null,{
     }
 }).addTo(map);
 
-fetch("Kawasanhutan.geojson")
+fetch("./Kawasanhutan.geojson")
 .then(res=>res.json())
 .then(data=>{
     kawasanLayer.addData(data);
-});
+})
+.catch(err=>console.error("Kawasan error:",err));
 
 // =======================
-// FILTER
+// FILTER (AMAN)
 // =======================
 
 document.getElementById("filterF2025").addEventListener("change",function(){
@@ -144,7 +209,7 @@ document.getElementById("filterF2025").addEventListener("change",function(){
 
     kawasanLayer.eachLayer(function(layer){
 
-        var kategori = layer.feature.properties.F2025;
+        var kategori = layer.feature.properties?.F2025;
 
         if(value==="ALL"){
             kawasanLayer.resetStyle(layer);
@@ -172,7 +237,8 @@ legend.onAdd = function(){
 
     var div = L.DomUtil.create("div","legend");
 
-    div.innerHTML = "<b>Kawasan Hutan</b><br>"+
+    div.innerHTML =
+        "<b>Kawasan Hutan</b><br>"+
         '<i style="background:#1b5e20"></i>HL<br>'+
         '<i style="background:#43a047"></i>HP<br>'+
         '<i style="background:#8bc34a"></i>HPT<br>'+
@@ -186,3 +252,6 @@ legend.onAdd = function(){
 legend.addTo(map);
 
 </script>
+
+</body>
+</html>
