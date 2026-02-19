@@ -1,62 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<title>WebGIS PBPH & Kawasan Hutan</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
-<style>
-body { margin:0; font-family: Arial, sans-serif; }
-#map { height:100vh; }
-
-.filter-box {
-    position:absolute;
-    top:10px;
-    left:60px;
-    background:white;
-    padding:10px;
-    border-radius:8px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.3);
-    z-index:1000;
-}
-
-.legend {
-    background:white;
-    padding:10px;
-    border-radius:8px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.3);
-    line-height:18px;
-    font-size:13px;
-}
-
-.legend i {
-    width:15px;
-    height:15px;
-    float:left;
-    margin-right:6px;
-    opacity:0.7;
-}
-</style>
-</head>
-<body>
-
-<div id="map"></div>
-
-<div class="filter-box">
-<b>Filter Kawasan Hutan</b><br>
-<select id="filterF2025">
-<option value="ALL">Semua</option>
-<option value="HL">HL</option>
-<option value="HP">HP</option>
-<option value="HPT">HPT</option>
-<option value="HPK">HPK</option>
-</select>
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script>
 
 // =======================
@@ -68,6 +9,9 @@ var map = L.map('map').setView([-3.3,114.6],7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; OpenStreetMap contributors'
 }).addTo(map);
+
+// Untuk menyimpan layer yang sedang aktif
+var selectedLayer = null;
 
 // =======================
 // STYLE FUNCTIONS
@@ -102,6 +46,40 @@ function styleKawasan(feature){
 }
 
 // =======================
+// FUNCTION HIGHLIGHT
+// =======================
+
+function highlightFeature(layer){
+
+    // Reset layer sebelumnya
+    if(selectedLayer){
+        if(selectedLayer.defaultStyle){
+            selectedLayer.setStyle(selectedLayer.defaultStyle);
+        }
+    }
+
+    // Simpan style asli
+    layer.defaultStyle = {
+        color: layer.options.color,
+        weight: layer.options.weight
+    };
+
+    // Set highlight
+    layer.setStyle({
+        weight:4,
+        color:"#000000"
+    });
+
+    selectedLayer = layer;
+
+    // Zoom halus
+    map.fitBounds(layer.getBounds(),{
+        padding:[40,40],
+        duration:0.8
+    });
+}
+
+// =======================
 // LAYER PBPH
 // =======================
 
@@ -115,6 +93,10 @@ var pbphLayer = L.geoJSON(null,{
             "Jenis: "+feature.properties.JENIS+"<br>"+
             "Luas: "+Number(feature.properties.LUAS).toLocaleString()+" Ha"
         );
+
+        layer.on("click",function(){
+            highlightFeature(layer);
+        });
 
     }
 }).addTo(map);
@@ -138,6 +120,10 @@ var kawasanLayer = L.geoJSON(null,{
             "Kabupaten: "+(feature.properties.KABUPATEN || "-")+"<br>"+
             "Luas: "+Number(feature.properties.LUAS).toLocaleString()+" Ha"
         );
+
+        layer.on("click",function(){
+            highlightFeature(layer);
+        });
 
     }
 }).addTo(map);
@@ -200,6 +186,3 @@ legend.onAdd = function(){
 legend.addTo(map);
 
 </script>
-
-</body>
-</html>
