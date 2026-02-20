@@ -243,8 +243,7 @@ var kabupatenLayer = L.geoJSON(null,{
     onEachFeature:function(feature,layer){
 
         layer.bindPopup("<b>Kabupaten: </b>" + 
-            (feature.properties?.KABUPATEN || 
-             feature.properties?.nama || "-"));
+            (feature.properties?.KABUPATEN || "-"));
 
         layer.on("click",function(){
             highlightFeature(layer);
@@ -316,15 +315,12 @@ function loadKabupatenOptions(){
 
     let set = new Set();
 
-    $('#filterKabupaten').empty(); // TAMBAHAN
-
+    $('#filterKabupaten').empty();
     $('#filterKabupaten').append(`<option value="ALL">Semua</option>`);
 
     kabupatenLayer.eachLayer(function(layer){
 
-        let nama =
-            layer.feature.properties?.KABUPATEN ||
-            layer.feature.properties?.nama;
+        let nama = layer.feature.properties?.KABUPATEN;
 
         if(nama){
             set.add(nama);
@@ -397,28 +393,30 @@ function applyFilter(){
     // =====================
     // FILTER KABUPATEN
     // =====================
-    kabupatenLayer.eachLayer(function(layer){
+  kabupatenLayer.eachLayer(function(layer){
 
-        let nama =
-            layer.feature.properties?.KABUPATEN ||
-            layer.feature.properties?.nama;
+    let nama = layer.feature.properties?.KABUPATEN;
 
-        if(!selectedKabupaten || selectedKabupaten.length === 0){
-            layer.addTo(map);
-        }
-        else if(selectedKabupaten.includes("ALL")){
-            layer.addTo(map);
-        }
-        else if(selectedKabupaten.includes(nama)){
-            layer.addTo(map);
-            bounds.extend(layer.getBounds());
+    if(!selectedKabupaten || selectedKabupaten.length === 0){
+        layer.addTo(map);
+    }
+    else if(selectedKabupaten.includes("ALL")){
+        layer.addTo(map);
+    }
+    else if(selectedKabupaten.includes(nama)){
+        layer.addTo(map);
+
+        let layerBounds = layer.getBounds();
+        if(layerBounds.isValid()){
+            bounds.extend(layerBounds);
             adaZoom = true;
         }
-        else{
-            map.removeLayer(layer);
-        }
+    }
+    else{
+        map.removeLayer(layer);
+    }
 
-    });
+});
 
     // =====================
     // AUTO ZOOM
@@ -438,6 +436,7 @@ $('#filterKabupaten').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
