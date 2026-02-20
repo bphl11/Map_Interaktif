@@ -347,49 +347,52 @@ function applyFilter(){
     // =====================
     // FILTER KAWASAN
     // =====================
-    kawasanLayer.eachLayer(function(layer){
+   kawasanLayer.eachLayer(function(layer){
 
-        var kategori = layer.feature.properties?.F2025;
+    var kategori = layer.feature.properties?.F2025;
 
-        if(!selectedKategori || selectedKategori.length === 0){
-    layer.addTo(map); // BUKAN removeLayer
-}
-        else if(selectedKategori.includes("ALL")){
-            layer.addTo(map);
-        }
-        else if(selectedKategori.includes(kategori)){
-            layer.addTo(map);
-        }
-        else{
-            map.removeLayer(layer);
-        }
+    if(!selectedKategori || selectedKategori.length === 0){
+        map.removeLayer(layer);   // tidak tampil kalau kosong
+    }
+    else if(selectedKategori.includes("ALL")){
+        layer.addTo(map);
+    }
+    else if(selectedKategori.includes(kategori)){
+        layer.addTo(map);
+    }
+    else{
+        map.removeLayer(layer);
+    }
 
-    });
+});
 
     // =====================
     // FILTER PBPH
     // =====================
-    pbphLayer.eachLayer(function(layer){
+ pbphLayer.eachLayer(function(layer){
 
-        var nama = layer.feature.properties?.NAMOBJ;
+    var nama = layer.feature.properties?.NAMOBJ;
 
-        if(!selectedNama || selectedNama.length === 0){
-    layer.addTo(map); // BUKAN removeLayer
-}
-        else if(selectedNama.includes("ALL")){
-            layer.addTo(map);
-        }
-        else if(selectedNama.includes(nama)){
-            layer.addTo(map);
-            bounds.extend(layer.getBounds());
+    if(!selectedNama || selectedNama.length === 0){
+        map.removeLayer(layer);   // tidak tampil kalau kosong
+    }
+    else if(selectedNama.includes("ALL")){
+        layer.addTo(map);
+    }
+    else if(selectedNama.includes(nama)){
+        layer.addTo(map);
+
+        let layerBounds = layer.getBounds();
+        if(layerBounds.isValid()){
+            bounds.extend(layerBounds);
             adaZoom = true;
         }
-        else{
-            map.removeLayer(layer);
-        }
+    }
+    else{
+        map.removeLayer(layer);
+    }
 
-    });
-
+});
     // =====================
     // FILTER KABUPATEN
     // =====================
@@ -436,6 +439,7 @@ $('#filterKabupaten').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
