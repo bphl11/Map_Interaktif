@@ -7,6 +7,9 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
+<!-- SELECT2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
 <style>
 body { margin:0; font-family: Arial, sans-serif; }
 #map { height:100vh; }
@@ -20,6 +23,7 @@ body { margin:0; font-family: Arial, sans-serif; }
     border-radius:8px;
     box-shadow:0 2px 6px rgba(0,0,0,0.3);
     z-index:1000;
+    width:260px;
 }
 
 .legend {
@@ -45,17 +49,25 @@ body { margin:0; font-family: Arial, sans-serif; }
 <div id="map"></div>
 
 <div class="filter-box">
-<b>Filter Kawasan Hutan</b><br>
-<select id="filterF2025">
-<option value="ALL">Semua</option>
-<option value="HL">HL</option>
-<option value="HP">HP</option>
-<option value="HPT">HPT</option>
-<option value="HPK">HPK</option>
-</select>
+<b>Filter</b><br><br>
+
+<label>Kategori Kawasan</label>
+<select id="filterF2025" multiple style="width:100%"></select>
+
+<br><br>
+
+<label>Nama PBPBH</label>
+<select id="filterNama" multiple style="width:100%"></select>
+
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- JQUERY WAJIB -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SELECT2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
 
@@ -63,10 +75,7 @@ body { margin:0; font-family: Arial, sans-serif; }
 // BASEMAP
 // =======================
 
-var map = L.map('map', {
-    zoomControl:true,
-    attributionControl:true
-}).setView([-3.3,114.6],7);
+var map = L.map('map').setView([-3.3,114.6],7);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; OpenStreetMap contributors'
@@ -88,13 +97,12 @@ function stylePBPH(){
 }
 
 function styleKawasan(feature){
-
    var warna = {
-    "HL":  "#02AD00",  // RGB(2,173,0)
-    "HP":  "#FFFF00",  // RGB(255,255,0)
-    "HPT": "#8AF200",  // RGB(138,242,0)
-    "HPK": "#FF5EFF"   // RGB(255,94,255)
-};
+        "HL":"#02AD00",
+        "HP":"#FFFF00",
+        "HPT":"#8AF200",
+        "HPK":"#FF5EFF"
+    };
 
     return {
         color:"#2e7d32",
@@ -105,7 +113,7 @@ function styleKawasan(feature){
 }
 
 // =======================
-// HIGHLIGHT + ZOOM
+// HIGHLIGHT
 // =======================
 
 function highlightFeature(layer){
@@ -114,12 +122,7 @@ function highlightFeature(layer){
         selectedLayer.setStyle(selectedLayer.originalStyle);
     }
 
-    layer.originalStyle = {
-        color: layer.options.color,
-        weight: layer.options.weight,
-        fillColor: layer.options.fillColor,
-        fillOpacity: layer.options.fillOpacity
-    };
+    layer.originalStyle = {...layer.options};
 
     layer.setStyle({
         weight:4,
@@ -142,21 +145,13 @@ var pbphLayer = L.geoJSON(null,{
     style:stylePBPH,
     onEachFeature:function(feature,layer){
 
-        var luas = feature.properties?.LUAS
-            ? Number(feature.properties.LUAS).toLocaleString()
-            : "0";
-
         layer.bindPopup(
-            "<b>"+(feature.properties?.NAMOBJ || "-")+"</b><br>"+
-            "Status: "+(feature.properties?.STAT_IZIN || "-")+"<br>"+
-            "Jenis: "+(feature.properties?.JENIS || "-")+"<br>"+
-            "Luas: "+luas+" Ha"
+            "<b>"+(feature.properties?.NAMOBJ || "-")+"</b>"
         );
 
         layer.on("click",function(){
             highlightFeature(layer);
         });
-
     }
 }).addTo(map);
 
@@ -164,31 +159,19 @@ fetch("./pbph.geojson")
 .then(res=>res.json())
 .then(data=>{
     pbphLayer.addData(data);
-})
-.catch(err=>console.error("PBPH error:",err));
+    loadNamaOptions(); // isi filter nama setelah data masuk
+});
 
 // =======================
-// KAWASAN HUTAN LAYER
+// KAWASAN LAYER
 // =======================
 
 var kawasanLayer = L.geoJSON(null,{
     style:styleKawasan,
     onEachFeature:function(feature,layer){
-
-        var luas = feature.properties?.LUAS
-            ? Number(feature.properties.LUAS).toLocaleString()
-            : "0";
-
-        layer.bindPopup(
-            "<b>Kawasan Hutan</b><br>"+
-            "Kabupaten: "+(feature.properties?.KABUPATEN || "-")+"<br>"+
-            "Luas: "+luas+" Ha"
-        );
-
         layer.on("click",function(){
             highlightFeature(layer);
         });
-
     }
 }).addTo(map);
 
@@ -196,64 +179,80 @@ fetch("./Kawasanhutan.geojson")
 .then(res=>res.json())
 .then(data=>{
     kawasanLayer.addData(data);
-})
-.catch(err=>console.error("Kawasan error:",err));
-
-// =======================
-// FILTER (AMAN)
-// =======================
-
-document.getElementById("filterF2025").addEventListener("change",function(){
-
-    var value = this.value;
-
-    kawasanLayer.eachLayer(function(layer){
-
-        var kategori = layer.feature.properties?.F2025;
-
-        if(value==="ALL"){
-            kawasanLayer.resetStyle(layer);
-            layer.addTo(map);
-        }
-        else if(kategori===value){
-            kawasanLayer.resetStyle(layer);
-            layer.addTo(map);
-        }
-        else{
-            map.removeLayer(layer);
-        }
-
-    });
-
+    loadKategoriOptions(); // isi kategori setelah data masuk
 });
 
 // =======================
-// LEGEND
+// AKTIFKAN SELECT2
 // =======================
 
-var legend = L.control({position:"bottomright"});
+$('#filterF2025').select2({
+    placeholder:"Pilih Kategori"
+});
 
-legend.onAdd = function(){
+$('#filterNama').select2({
+    placeholder:"Pilih Nama PBPBH"
+});
 
-    var div = L.DomUtil.create("div","legend");
+// =======================
+// LOAD OPTION DINAMIS
+// =======================
 
-    div.innerHTML =
-        "<b>Kawasan Hutan</b><br>"+
-        '<i style="background:#02AD00"></i>HL<br>'+
-        '<i style="background:#FFFF00"></i>HP<br>'+
-        '<i style="background:#8AF200"></i>HPT<br>'+
-        '<i style="background:#FF5EFF"></i>HPK<br><br>'+
-        "<b>PBPH</b><br>"+
-        '<i style="background:#ff9800"></i>Area PBPH';
+function loadKategoriOptions(){
+    let set = new Set();
+    kawasanLayer.eachLayer(function(layer){
+        set.add(layer.feature.properties?.F2025);
+    });
+    set.forEach(val=>{
+        $('#filterF2025').append(`<option value="${val}">${val}</option>`);
+    });
+}
 
-    return div;
-};
+function loadNamaOptions(){
+    let set = new Set();
+    pbphLayer.eachLayer(function(layer){
+        set.add(layer.feature.properties?.NAMOBJ);
+    });
+    set.forEach(val=>{
+        $('#filterNama').append(`<option value="${val}">${val}</option>`);
+    });
+}
 
-legend.addTo(map);
+// =======================
+// FILTER FUNCTION
+// =======================
+
+function applyFilter(){
+
+    var selectedKategori = $('#filterF2025').val();
+    var selectedNama = $('#filterNama').val();
+
+    kawasanLayer.eachLayer(function(layer){
+        var kategori = layer.feature.properties?.F2025;
+        var show = !selectedKategori || selectedKategori.length===0 || selectedKategori.includes(kategori);
+
+        if(show){
+            layer.addTo(map);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    pbphLayer.eachLayer(function(layer){
+        var nama = layer.feature.properties?.NAMOBJ;
+        var show = !selectedNama || selectedNama.length===0 || selectedNama.includes(nama);
+
+        if(show){
+            layer.addTo(map);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+}
+
+$('#filterF2025').on('change', applyFilter);
+$('#filterNama').on('change', applyFilter);
 
 </script>
-
 </body>
 </html>
-
-
