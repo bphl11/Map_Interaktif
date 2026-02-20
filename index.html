@@ -85,7 +85,12 @@ body { margin:0; font-family: Arial, sans-serif; }
 
 <label>Nama PBPH</label>
 <select id="filterNama" multiple style="width:100%"></select>
+    
+<br><br>
 
+<label>Kabupaten</label>
+<select id="filterKabupaten" multiple style="width:100%"></select>
+    
 </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -225,7 +230,34 @@ fetch("./Kawasanhutan.geojson")
     kawasanLayer.addData(data);
     loadKategoriOptions(); // isi kategori setelah data masuk
 });
+// =======================
+// KABUPATEN LAYER
+// =======================
 
+var kabupatenLayer = L.geoJSON(null,{
+    style:{
+        color:"#005eff",
+        weight:2,
+        fillOpacity:0
+    },
+    onEachFeature:function(feature,layer){
+
+        layer.bindPopup("<b>Kabupaten: </b>" + 
+            (feature.properties?.KABUPATEN || 
+             feature.properties?.nama || "-"));
+
+        layer.on("click",function(){
+            highlightFeature(layer);
+        });
+    }
+}).addTo(map);
+
+fetch("./Kabupaten.geojson")
+.then(res=>res.json())
+.then(data=>{
+    kabupatenLayer.addData(data);
+    loadKabupatenOptions();
+});
 // =======================
 // AKTIFKAN SELECT2
 // =======================
@@ -237,7 +269,10 @@ $('#filterF2025').select2({
 $('#filterNama').select2({
     placeholder:"Pilih Nama PBPH"
 });
-
+    
+$('#filterKabupaten').select2({
+    placeholder:"Pilih Kabupaten"
+});
 // =======================
 // LOAD OPTION DINAMIS
 // =======================
@@ -245,11 +280,14 @@ $('#filterNama').select2({
 function loadKategoriOptions(){
     let set = new Set();
 
-    // Tambah opsi Semua
+    $('#filterF2025').empty(); // supaya tidak dobel
+
     $('#filterF2025').append(`<option value="ALL">Semua</option>`);
 
     kawasanLayer.eachLayer(function(layer){
-        set.add(layer.feature.properties?.F2025);
+        if(layer.feature.properties?.F2025){
+            set.add(layer.feature.properties.F2025);
+        }
     });
 
     set.forEach(val=>{
@@ -260,18 +298,43 @@ function loadKategoriOptions(){
 function loadNamaOptions(){
     let set = new Set();
 
-    // Tambah opsi Semua
+    $('#filterNama').empty(); // TAMBAHAN
+
     $('#filterNama').append(`<option value="ALL">Semua</option>`);
 
     pbphLayer.eachLayer(function(layer){
-        set.add(layer.feature.properties?.NAMOBJ);
+        if(layer.feature.properties?.NAMOBJ){
+            set.add(layer.feature.properties.NAMOBJ);
+        }
     });
 
     set.forEach(val=>{
         $('#filterNama').append(`<option value="${val}">${val}</option>`);
     });
 }
+function loadKabupatenOptions(){
 
+    let set = new Set();
+
+    $('#filterKabupaten').empty(); // TAMBAHAN
+
+    $('#filterKabupaten').append(`<option value="ALL">Semua</option>`);
+
+    kabupatenLayer.eachLayer(function(layer){
+
+        let nama =
+            layer.feature.properties?.KABUPATEN ||
+            layer.feature.properties?.nama;
+
+        if(nama){
+            set.add(nama);
+        }
+    });
+
+    set.forEach(val=>{
+        $('#filterKabupaten').append(`<option value="${val}">${val}</option>`);
+    });
+}
 // =======================
 // FILTER FUNCTION
 // =======================
@@ -280,9 +343,10 @@ function applyFilter(){
 
     var selectedKategori = $('#filterF2025').val();
     var selectedNama = $('#filterNama').val();
+    var selectedKabupaten = $('#filterKabupaten').val();
 
     var bounds = L.latLngBounds([]);
-    var adaPBPH = false;
+    var adaZoom = false;
 
     // =====================
     // FILTER KAWASAN
@@ -292,8 +356,8 @@ function applyFilter(){
         var kategori = layer.feature.properties?.F2025;
 
         if(!selectedKategori || selectedKategori.length === 0){
-            map.removeLayer(layer);
-        }
+    layer.addTo(map); // BUKAN removeLayer
+}
         else if(selectedKategori.includes("ALL")){
             layer.addTo(map);
         }
@@ -307,23 +371,48 @@ function applyFilter(){
     });
 
     // =====================
-    // FILTER PBPH + ZOOM
+    // FILTER PBPH
     // =====================
     pbphLayer.eachLayer(function(layer){
 
         var nama = layer.feature.properties?.NAMOBJ;
 
         if(!selectedNama || selectedNama.length === 0){
-            map.removeLayer(layer);
-        }
+    layer.addTo(map); // BUKAN removeLayer
+}
         else if(selectedNama.includes("ALL")){
             layer.addTo(map);
         }
         else if(selectedNama.includes(nama)){
             layer.addTo(map);
-
             bounds.extend(layer.getBounds());
-            adaPBPH = true;
+            adaZoom = true;
+        }
+        else{
+            map.removeLayer(layer);
+        }
+
+    });
+
+    // =====================
+    // FILTER KABUPATEN
+    // =====================
+    kabupatenLayer.eachLayer(function(layer){
+
+        let nama =
+            layer.feature.properties?.KABUPATEN ||
+            layer.feature.properties?.nama;
+
+        if(!selectedKabupaten || selectedKabupaten.length === 0){
+            layer.addTo(map);
+        }
+        else if(selectedKabupaten.includes("ALL")){
+            layer.addTo(map);
+        }
+        else if(selectedKabupaten.includes(nama)){
+            layer.addTo(map);
+            bounds.extend(layer.getBounds());
+            adaZoom = true;
         }
         else{
             map.removeLayer(layer);
@@ -334,21 +423,22 @@ function applyFilter(){
     // =====================
     // AUTO ZOOM
     // =====================
-    if(adaPBPH && bounds.isValid()){
-        map.flyToBounds(bounds, {
+    if(adaZoom && bounds.isValid()){
+        map.flyToBounds(bounds,{
             padding:[40,40],
             duration:0.8
         });
     }
-
 }
 
 $('#filterF2025').on('change', applyFilter);
 $('#filterNama').on('change', applyFilter);
-
+$('#filterKabupaten').on('change', applyFilter);
+    
 </script>
 </body>
 </html>
+
 
 
 
