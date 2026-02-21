@@ -253,9 +253,6 @@ L.control.locate = function(opts) {
 };
 
 L.control.locate().addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'&copy; OpenStreetMap contributors'
-}).addTo(map);
 
 var selectedLayer = null;
 
@@ -410,7 +407,8 @@ var industriLayer = L.geoJSON(null,{
     onEachFeature:function(feature,layer){
 
         var nama = feature.properties?.name;
-
+        
+layer.bindPopup("<b>" + nama + "</b>");
        layer.bindTooltip(nama, {
     permanent: true,
     direction: "top",
@@ -743,6 +741,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
