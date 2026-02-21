@@ -133,7 +133,7 @@ z-index:1000;
 
 var dataLuasKab = {};
 
-fetch("./data_luas_kabupaten.json")
+fetch("data_luas_kabupaten.json")
 .then(res => res.json())
 .then(data => {
     dataLuasKab = data;
@@ -349,7 +349,7 @@ layer.bindPopup(
     }
 }).addTo(map);
 
-fetch("./pbph.geojson")
+fetch("pbph.geojson")
 .then(res=>res.json())
 .then(data=>{
     pbphLayer.addData(data);
@@ -370,13 +370,13 @@ var kawasanLayer = L.geoJSON(null,{
 }).addTo(map);
 
 // Load Kawasan Hutan
-fetch("./Kawasanhutan.geojson")
+fetch("Kawasanhutan.geojson")
 .then(res=>res.json())
 .then(data=>{
     kawasanLayer.addData(data);
 
     // Setelah file pertama masuk, baru load HK
-    return fetch("./Konservasi.geojson");
+    return fetch("Konservasi.geojson");
 })
 .then(res=>res.json())
 .then(dataHK=>{
@@ -421,7 +421,7 @@ layer.bindPopup("<b>" + nama + "</b>");
     }
 }).addTo(map);
 
-fetch("./PBPHH_6000_KE_ATAS.geojson")
+fetch("PBPHH_6000_KE_ATAS.geojson")
 .then(res=>res.json())
 .then(data=>{
     industriLayer.addData(data);
@@ -478,7 +478,7 @@ var kabupatenLayer = L.geoJSON(null,{
     }
 }).addTo(map);
 
-fetch("./Kabupaten.geojson")
+fetch("Kabupaten.geojson")
 .then(res=>res.json())
 .then(data=>{
     kabupatenLayer.addData(data);
@@ -741,6 +741,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
