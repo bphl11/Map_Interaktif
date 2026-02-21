@@ -229,30 +229,26 @@ function onLocationError(e) {
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
-// Tombol otomatis aktif saat klik
-L.control.locate = function(opts) {
-    return new L.Control({
-        position: 'topleft',
-        onAdd: function(map) {
-            var btn = L.DomUtil.create('button', '');
-            btn.innerHTML = "📍";
-            btn.title = "Tampilkan Lokasi Saya";
-            btn.style.background = "white";
-            btn.style.width = "34px";
-            btn.style.height = "34px";
-            btn.style.border = "2px solid #ccc";
-            btn.style.cursor = "pointer";
+// CARA BENAR BUAT CONTROL
+var locateControl = L.control({position: 'topleft'});
 
-            btn.onclick = function(){
-                map.locate({setView: true, maxZoom: 16});
-            }
+locateControl.onAdd = function(map){
+    var btn = L.DomUtil.create('button');
+    btn.innerHTML = "📍";
+    btn.style.background = "white";
+    btn.style.width = "34px";
+    btn.style.height = "34px";
+    btn.style.border = "2px solid #ccc";
+    btn.style.cursor = "pointer";
 
-            return btn;
-        }
-    });
+    btn.onclick = function(){
+        map.locate({setView: true, maxZoom: 16});
+    };
+
+    return btn;
 };
 
-L.control.locate().addTo(map);
+locateControl.addTo(map);
 
 var selectedLayer = null;
 
@@ -741,6 +737,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
