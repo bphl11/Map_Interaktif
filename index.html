@@ -621,19 +621,16 @@ industriLayer.eachLayer(function(layer){
 
 });
 
-// Zoom jika ada yang dipilih
+//// =====================
+// PRIORITAS ZOOM
+// =====================
 if(boundsIndustri.isValid()){
-    map.flyToBounds(boundsIndustri, {
+    map.flyToBounds(boundsIndustri,{
         padding:[40,40],
         duration:0.8
     });
 }
-
-});
-   // =====================
-// AUTO ZOOM
-// =====================
-if(adaZoom && bounds.isValid()){
+else if(adaZoom && bounds.isValid()){
     map.flyToBounds(bounds,{
         padding:[40,40],
         duration:0.8
@@ -655,6 +652,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
