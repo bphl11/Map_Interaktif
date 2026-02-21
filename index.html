@@ -593,33 +593,41 @@ function applyFilter(){
 
 });
 
-// =====================
+/// =====================
 // FILTER INDUSTRI 6000 UP
 // =====================
 var selectedIndustri = $('#filterIndustri').val();
+
+var boundsIndustri = L.latLngBounds([]);
 
 industriLayer.eachLayer(function(layer){
 
     var nama = layer.feature.properties?.name;
 
     if(!selectedIndustri || selectedIndustri.length === 0){
-    layer.addTo(map);
-}
+        map.removeLayer(layer);
+    }
     else if(selectedIndustri.includes("ALL")){
         layer.addTo(map);
+        boundsIndustri.extend(layer.getLatLng());
     }
     else if(selectedIndustri.includes(nama)){
         layer.addTo(map);
-
-        let layerBounds = layer.getBounds();
-        if(layerBounds.isValid()){
-            bounds.extend(layerBounds);
-            adaZoom = true;
-        }
+        boundsIndustri.extend(layer.getLatLng());
     }
     else{
         map.removeLayer(layer);
     }
+
+});
+
+// Zoom jika ada yang dipilih
+if(boundsIndustri.isValid()){
+    map.flyToBounds(boundsIndustri, {
+        padding:[40,40],
+        duration:0.8
+    });
+}
 
 });
    // =====================
@@ -647,6 +655,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
