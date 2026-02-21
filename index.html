@@ -348,7 +348,11 @@ var industriLayer = L.geoJSON(null,{
 
         var nama = feature.properties?.name;
 
-        layer.bindPopup("<b>"+nama+"</b>");
+       layer.bindTooltip(nama, {
+    permanent: true,
+    direction: "top",
+    offset: [0, -8]
+});
 
         layer.on("click",function(){
             highlightFeature(layer);
@@ -361,6 +365,22 @@ fetch("./PBPHH_6000_KE_ATAS.geojson")
 .then(data=>{
     industriLayer.addData(data);
     loadIndustriOptions();
+});
+// =======================
+// TOOLTIP ZOOM CONTROL
+// =======================
+map.on("zoomend", function() {
+
+    var zoomLevel = map.getZoom();
+
+    industriLayer.eachLayer(function(layer){
+        if(zoomLevel >= 12){
+            layer.openTooltip();
+        } else {
+            layer.closeTooltip();
+        }
+    });
+
 });
 // =======================
 // KABUPATEN LAYER
@@ -660,6 +680,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
