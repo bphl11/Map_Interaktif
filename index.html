@@ -211,6 +211,7 @@ function styleKawasan(feature){
         "HP":"#FFFF00",
         "HPT":"#8AF200",
         "HPK":"#FF5EFF"
+        "HK":"#AD3FFF"
     };
 
     return {
@@ -289,7 +290,7 @@ fetch("./pbph.geojson")
 });
 
 // =======================
-// KAWASAN LAYER
+// KAWASAN LAYER (GABUNG 2 FILE)
 // =======================
 
 var kawasanLayer = L.geoJSON(null,{
@@ -301,11 +302,27 @@ var kawasanLayer = L.geoJSON(null,{
     }
 }).addTo(map);
 
+// Load Kawasan Hutan
 fetch("./Kawasanhutan.geojson")
 .then(res=>res.json())
 .then(data=>{
     kawasanLayer.addData(data);
-    loadKategoriOptions(); // isi kategori setelah data masuk
+
+    // Setelah file pertama masuk, baru load HK
+    return fetch("./Konservasi.geojson");
+})
+.then(res=>res.json())
+.then(dataHK=>{
+
+    // Tambahkan properti F2025 = "HK"
+    dataHK.features.forEach(function(f){
+        f.properties.F2025 = "HK";
+    });
+
+    kawasanLayer.addData(dataHK);
+
+    // Load kategori setelah semua masuk
+    loadKategoriOptions();
 });
 // =======================
 // KABUPATEN LAYER
@@ -536,6 +553,7 @@ $('#filterKabupaten').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
