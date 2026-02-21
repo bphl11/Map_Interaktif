@@ -102,6 +102,18 @@ body { margin:0; font-family: Arial, sans-serif; }
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
+// =======================
+// LOAD DATA LUAS KABUPATEN
+// =======================
+
+var dataLuasKab = {};
+
+fetch("./data_luas_kabupaten.json")
+.then(res => res.json())
+.then(data => {
+    dataLuasKab = data;
+    console.log("Data luas kabupaten berhasil dimuat");
+});
 
 // =======================
 // BASEMAP
@@ -439,6 +451,7 @@ $('#filterKabupaten').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
