@@ -607,20 +607,28 @@ industriLayer.eachLayer(function(layer){
     if(!selectedIndustri || selectedIndustri.length === 0){
         map.removeLayer(layer);
     }
+
     else if(selectedIndustri.includes("ALL")){
         layer.addTo(map);
         boundsIndustri.extend(layer.getLatLng());
+
+        // AUTO POPUP
+        layer.openPopup();
     }
+
     else if(selectedIndustri.includes(nama)){
         layer.addTo(map);
         boundsIndustri.extend(layer.getLatLng());
+
+        // AUTO POPUP
+        layer.openPopup();
     }
+
     else{
         map.removeLayer(layer);
     }
 
 });
-
 //// =====================
 // PRIORITAS ZOOM
 // =====================
@@ -652,6 +660,7 @@ $('#filterIndustri').on('change', applyFilter);
 </script>
 </body>
 </html>
+
 
 
 
