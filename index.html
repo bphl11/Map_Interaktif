@@ -846,6 +846,15 @@ function loadProduksi(){
 }
 let chartKawasanInstance = null;
 
+function parseAngka(value){
+    if(!value) return 0;
+    return parseFloat(
+        value.toString()
+             .replace(/\./g,'')
+             .replace(',', '.')
+    ) || 0;
+}
+
 function loadKawasan(){
 
     const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
@@ -856,16 +865,17 @@ function loadKawasan(){
     .then(data => {
 
         const filtered = data.filter(row =>
-            row.Kabupaten && row.Kabupaten !== "Total Luas"
+            row["Kabupaten"] &&
+            row["Kabupaten"] !== "Total Luas"
         );
 
-        const labels = filtered.map(r => r.Kabupaten);
+        const labels = filtered.map(r => r["Kabupaten"]);
 
-        const HL = filtered.map(r => parseFloat(r["HL (Ha)"].replace(/\./g,'').replace(',', '.')));
-        const HP = filtered.map(r => parseFloat(r["HP (Ha)"].replace(/\./g,'').replace(',', '.')));
-        const HPK = filtered.map(r => parseFloat(r["HPK (Ha)"].replace(/\./g,'').replace(',', '.')));
-        const HPT = filtered.map(r => parseFloat(r["HPT (Ha)"].replace(/\./g,'').replace(',', '.')));
-        const HK = filtered.map(r => parseFloat(r["HK (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const HL  = filtered.map(r => parseAngka(r["HL (Ha)"]));
+        const HP  = filtered.map(r => parseAngka(r["HP (Ha)"]));
+        const HPK = filtered.map(r => parseAngka(r["HPK (Ha)"]));
+        const HPT = filtered.map(r => parseAngka(r["HPT (Ha)"]));
+        const HK  = filtered.map(r => parseAngka(r["HK (Ha)"]));
 
         if(chartKawasanInstance){
             chartKawasanInstance.destroy();
@@ -878,11 +888,11 @@ function loadKawasan(){
                 data:{
                     labels: labels,
                     datasets:[
-                        {label:'HL', data:HL},
-                        {label:'HP', data:HP},
+                        {label:'HL',  data:HL},
+                        {label:'HP',  data:HP},
                         {label:'HPK', data:HPK},
                         {label:'HPT', data:HPT},
-                        {label:'HK', data:HK}
+                        {label:'HK',  data:HK}
                     ]
                 },
                 options:{
@@ -958,6 +968,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
