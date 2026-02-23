@@ -69,6 +69,25 @@ body { margin:0; font-family: Arial, sans-serif; }
     margin-right:6px;
     opacity:0.7;
 }
+   .legend i {
+    width:15px;
+    height:15px;
+    float:left;
+    margin-right:6px;
+    opacity:0.7;
+}
+
+/* ===== MENU DASHBOARD ===== */
+.menu-item {
+    padding:10px 12px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.menu-item:hover {
+    background:#f0f0f0;
+}
+
 </style>
 </head>
 <body>
@@ -80,38 +99,25 @@ body { margin:0; font-family: Arial, sans-serif; }
 position:absolute;
 left:60px;
 top:300px;
-width:220px;
+width:280px;
 background:white;
-padding:10px;
 border-radius:8px;
 box-shadow:0 3px 8px rgba(0,0,0,0.25);
 z-index:1000;
+overflow:hidden;
 ">
 
-<h4 style="margin:0 0 10px 0;">
-Dashboard Monitoring 
-</h4>
-
-<label style="font-size:13px;font-weight:bold;">Tahun</label>
-<select id="filterTahun" style="width:100%;margin-bottom:10px;">
-    <option value="2023">2023</option>
-    <option value="2024">2024</option>
-    <option value="2025" selected>2025</option>
-</select>
-
-<div style="background:#f5f5f5;padding:10px;border-radius:8px;margin-bottom:8px;">
-    <b>Total Realisasi</b>
-    <div id="totalRealisasi" style="font-size:18px;color:#2e7d32;">0 Ha</div>
+<div style="background:#2e7d32;color:white;padding:12px;font-weight:bold;">
+Dashboard Monitoring
 </div>
 
-<div style="background:#f5f5f5;padding:10px;border-radius:8px;margin-bottom:8px;">
-    <b>Rata-rata Persentase</b>
-    <div id="avgPersen" style="font-size:18px;color:#1565c0;">0 %</div>
+<div id="dashboardMenu" style="border-bottom:1px solid #ddd;">
+    <div class="menu-item" onclick="loadPenanaman()">📊 Laporan Penanaman PBPH</div>
+    <div class="menu-item" onclick="loadProduksi()">🏭 Laporan Produksi PBPHH</div>
 </div>
 
-<div style="background:#f5f5f5;padding:10px;border-radius:8px;">
-    <b>Jumlah PBPH</b>
-    <div id="jumlahPBPH" style="font-size:18px;color:#6a1b9a;">0</div>
+<div id="dashboardContent" style="padding:12px;font-size:13px;">
+    Pilih menu untuk menampilkan laporan.
 </div>
 
 </div>
@@ -801,10 +807,69 @@ function updateHeaderDashboard(){
 document.getElementById("filterTahun").addEventListener("change", updateHeaderDashboard);
 
 updateHeaderDashboard();
+// =======================
+// MENU DASHBOARD DINAMIS
+// =======================
 
+function loadPenanaman(){
+    document.getElementById("dashboardContent").innerHTML = `
+        <b>Laporan Penanaman PBPH</b><br><br>
+        <div id="penanamanTable">Loading data...</div>
+    `;
+
+    loadSheetData("Penanaman");
+}
+
+function loadProduksi(){
+    document.getElementById("dashboardContent").innerHTML = `
+        <b>Laporan Produksi PBPHH</b><br><br>
+        <div id="produksiTable">Loading data...</div>
+    `;
+
+    loadSheetData("Produksi");
+}
+
+function loadSheetData(sheetName){
+
+    const spreadsheetID = "1u9Wx1pUc2M-KzE9997_osg-8NHG5wH4etq4H9am7Rmc";
+    const url = `https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`;
+
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "<table border='1' style='border-collapse:collapse;font-size:12px;width:100%'>";
+        
+        if(data.length > 0){
+            html += "<tr>";
+            Object.keys(data[0]).forEach(key=>{
+                html += `<th style='padding:4px;background:#eee;'>${key}</th>`;
+            });
+            html += "</tr>";
+
+            data.forEach(row=>{
+                html += "<tr>";
+                Object.values(row).forEach(val=>{
+                    html += `<td style='padding:4px;'>${val}</td>`;
+                });
+                html += "</tr>";
+            });
+        }
+
+        html += "</table>";
+
+        document.getElementById("dashboardContent").innerHTML = html;
+
+    })
+    .catch(err=>{
+        document.getElementById("dashboardContent").innerHTML =
+        "Gagal mengambil data Google Sheet.";
+    });
+}
 </script>>
 </body>
 </html>
+
 
 
 
