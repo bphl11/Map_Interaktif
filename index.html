@@ -86,7 +86,8 @@ body { margin:0; font-family: Arial, sans-serif; }
     box-shadow:0 15px 30px rgba(0,0,0,0.15);
     padding:15px;
     overflow-y:auto;
-    transition: 0.3s ease;   /* PINDAH KE SINI */
+    transition: 0.3s ease;
+    z-index: 1000; 
 }
 
 #sidebar.collapsed{
@@ -883,6 +884,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
