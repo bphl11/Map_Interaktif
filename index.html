@@ -81,7 +81,10 @@ body { margin:0; font-family: Arial, sans-serif; }
     left:20px;
     width:300px;
     height:90vh;
-    background:white;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.4);
     border-radius:15px;
     box-shadow:0 15px 30px rgba(0,0,0,0.15);
     padding:15px;
@@ -152,8 +155,9 @@ label{
             📊 Monitoring ▼
         </div>
         <div class="menu-child">
+            <div onclick="loadKawasan()">Luas Kawasan Hutan</div>
             <div onclick="loadPenanaman()">Penanaman PBPH</div>
-             <div onclick="loadPenanaman()">Produksi PBPH</div>
+             <div onclick="loadProduksi()">Produksi PBPH</div>
             <div onclick="loadProduksi()">Produksi Industri 6000 UP</div>
         </div>
     </div>
@@ -885,6 +889,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
