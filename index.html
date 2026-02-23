@@ -78,34 +78,42 @@ body { margin:0; font-family: Arial, sans-serif; }
 }
 
 /* ===== MENU DASHBOARD ===== */
-.menu-item {
-    padding:10px 12px;
-    cursor:pointer;
-    font-size:13px;
+#dashboardPanel {
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.menu-item:hover {
-    background:#f0f0f0;
+#dashboardContent {
+    overflow-y: auto;
+    max-height: 45vh;
 }
 
-</style>
+#dashboardContent table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+#dashboardContent th {
+    background: #2e7d32;
+    color: white;
+    padding: 4px;
+    position: sticky;
+    top: 0;
+}
+
+#dashboardContent td {
+    padding: 4px;
+    border: 1px solid #ddd;
+}
 </head>
 <body>
 
 <div id="map"></div>
 
 <!-- PANEL DASHBOARD -->
-<div id="dashboardPanel" style="
-position:absolute;
-left:60px;
-top:300px;
-width:280px;
-background:white;
-border-radius:8px;
-box-shadow:0 3px 8px rgba(0,0,0,0.25);
-z-index:1000;
-overflow:hidden;
-">
+<div id="dashboardPanel">
 
 <div style="background:#2e7d32;color:white;padding:12px;font-weight:bold;">
 Dashboard Monitoring
@@ -869,6 +877,7 @@ function loadSheetData(sheetName){
 </script>>
 </body>
 </html>
+
 
 
 
