@@ -193,7 +193,9 @@ label{
             <label>Industri 6000 UP</label>
             <select id="filterIndustri" multiple></select>
 <hr>
-<div id="dashboardContent" style="margin-top:15px;"></div>
+<div id="chartContainer" style="height:350px; margin-top:20px;">
+    <canvas id="chartKawasan"></canvas>
+</div>
         </div>
     </div>
 
@@ -843,10 +845,8 @@ function loadProduksi(){
     loadSheetData("Produksi");
 }
 let chartKawasanInstance = null;
-   function loadKawasan(){
 
-    document.getElementById("dashboardContent").innerHTML = 
-        '<canvas id="chartKawasan"></canvas>';
+function loadKawasan(){
 
     const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
     const sheetName = "Kawasan";
@@ -855,25 +855,45 @@ let chartKawasanInstance = null;
     .then(res => res.json())
     .then(data => {
 
-        const labels = data.map(row => row.Kabupaten);
-        const hl = data.map(row => parseFloat(row["HL (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const filtered = data.filter(row =>
+            row.Kabupaten && row.Kabupaten !== "Total Luas"
+        );
 
-        const ctx = document.getElementById('chartKawasan').getContext('2d');
+        const labels = filtered.map(r => r.Kabupaten);
 
-        if (chartKawasanInstance) {
+        const HL = filtered.map(r => parseFloat(r["HL (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const HP = filtered.map(r => parseFloat(r["HP (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const HPK = filtered.map(r => parseFloat(r["HPK (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const HPT = filtered.map(r => parseFloat(r["HPT (Ha)"].replace(/\./g,'').replace(',', '.')));
+        const HK = filtered.map(r => parseFloat(r["HK (Ha)"].replace(/\./g,'').replace(',', '.')));
+
+        if(chartKawasanInstance){
             chartKawasanInstance.destroy();
         }
 
-        chartKawasanInstance = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'HL (Ha)',
-                    data: hl
-                }]
+        chartKawasanInstance = new Chart(
+            document.getElementById("chartKawasan"),
+            {
+                type:'bar',
+                data:{
+                    labels: labels,
+                    datasets:[
+                        {label:'HL', data:HL},
+                        {label:'HP', data:HP},
+                        {label:'HPK', data:HPK},
+                        {label:'HPT', data:HPT},
+                        {label:'HK', data:HK}
+                    ]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    scales:{
+                        y:{ beginAtZero:true }
+                    }
+                }
             }
-        });
+        );
 
     });
 }
@@ -938,6 +958,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
