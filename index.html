@@ -28,6 +28,9 @@ body { margin:0; font-family: Arial, sans-serif; }
     padding:20px;
     z-index:2000;
     display:none;
+
+    resize: both;      
+    overflow: auto;   
 }
 
 #chartOverlay button{
@@ -991,7 +994,7 @@ function loadSheetData(sheetName){
         "Gagal mengambil data Google Sheet.";
     });
 }
-    // =======================
+// =======================
 // COLLAPSIBLE SIDEBAR
 // =======================
 
@@ -999,9 +1002,41 @@ document.getElementById("toggleSidebar").onclick = function(){
     document.getElementById("sidebar").classList.toggle("collapsed");
 };
     console.log("Load Kawasan Clicked");
+  // =======================
+// DRAG CHART OVERLAY
+// =======================
+
+const chartOverlay = document.getElementById("chartOverlay");
+
+let isDragging = false;
+let offsetX, offsetY;
+
+chartOverlay.addEventListener("mousedown", function(e){
+
+    if(e.target.tagName === "BUTTON") return;
+
+    isDragging = true;
+    offsetX = e.clientX - chartOverlay.offsetLeft;
+    offsetY = e.clientY - chartOverlay.offsetTop;
+
+    chartOverlay.style.transform = "none";
+});
+
+document.addEventListener("mousemove", function(e){
+    if(isDragging){
+        chartOverlay.style.left = (e.clientX - offsetX) + "px";
+        chartOverlay.style.top = (e.clientY - offsetY) + "px";
+    }
+});
+
+document.addEventListener("mouseup", function(){
+    isDragging = false;
+});
+
 </script>
 </body>
 </html>
+
 
 
 
