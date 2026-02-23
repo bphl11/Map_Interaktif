@@ -95,7 +95,14 @@ body { margin:0; font-family: Arial, sans-serif; }
     transition:0.3s ease;
     z-index:1000;
 }
-
+#dashboardContent{
+    margin-top:15px;
+    padding:10px;
+    background:white;
+    border-radius:10px;
+    max-height:40vh;
+    overflow-y:auto;
+}
 #sidebar.collapsed{
     transform: translateX(-110%);
 }
@@ -833,12 +840,10 @@ function loadProduksi(){
 
     loadSheetData("Produksi");
 }
-    function loadKawasan(){
+   function loadKawasan(){
 
-    document.getElementById("dashboardContent").innerHTML = `
-        <b>Luas Kawasan Hutan</b><br><br>
-        <div>Loading data...</div>
-    `;
+    document.getElementById("dashboardContent").innerHTML =
+    "<h2 style='color:red'>TES BERHASIL</h2>";
 
     const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
     const sheetName = "Kawasan";
@@ -876,6 +881,7 @@ function loadProduksi(){
         document.getElementById("dashboardContent").innerHTML =
         "Gagal mengambil data Spreadsheet.";
     });
+
 }
 // =======================
 // TOGGLE MENU SIDEBAR
@@ -937,6 +943,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
