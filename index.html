@@ -842,58 +842,36 @@ function loadProduksi(){
 
     loadSheetData("Produksi");
 }
+let chartKawasanInstance = null;
    function loadKawasan(){
 
-    document.getElementById("dashboardContent").innerHTML =
-    "<canvas id='chartKawasan' height='250'></canvas>";
+    document.getElementById("dashboardContent").innerHTML = 
+        '<canvas id="chartKawasan"></canvas>';
 
     const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
     const sheetName = "Kawasan";
-    const url = `https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`;
 
-    fetch(url)
+    fetch(`https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`)
     .then(res => res.json())
     .then(data => {
 
-        let labels = [];
-        let luasData = [];
+        const labels = data.map(row => row.Kabupaten);
+        const hl = data.map(row => parseFloat(row["HL (Ha)"].replace(/\./g,'').replace(',', '.')));
 
-        data.forEach(row => {
-            if(row.Kabupaten !== "Total Luas"){
-                labels.push(row.Kabupaten);
-                luasData.push(parseFloat(
-                    row["Luas Fungsi Kabupaten (Ha)"]
-                    .replace(/\./g,'')
-                    .replace(',','.')
-                ));
-            }
-        });
+        const ctx = document.getElementById('chartKawasan').getContext('2d');
 
-        const ctx = document.getElementById("chartKawasan").getContext("2d");
+        if (chartKawasanInstance) {
+            chartKawasanInstance.destroy();
+        }
 
-        new Chart(ctx, {
-            type: "bar",
+        chartKawasanInstance = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: "Luas Fungsi Kabupaten (Ha)",
-                    data: luasData
+                    label: 'HL (Ha)',
+                    data: hl
                 }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: "Diagram Luas Kawasan Hutan per Kabupaten"
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
             }
         });
 
@@ -956,10 +934,11 @@ function loadSheetData(sheetName){
 document.getElementById("toggleSidebar").onclick = function(){
     document.getElementById("sidebar").classList.toggle("collapsed");
 };
-    console.log("Script Loaded");
+    console.log("Load Kawasan Clicked");
 </script>
 </body>
 </html>
+
 
 
 
