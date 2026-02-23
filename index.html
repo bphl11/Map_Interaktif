@@ -832,6 +832,50 @@ function loadProduksi(){
 
     loadSheetData("Produksi");
 }
+    function loadKawasan(){
+
+    document.getElementById("dashboardContent").innerHTML = `
+        <b>Luas Kawasan Hutan</b><br><br>
+        <div>Loading data...</div>
+    `;
+
+    const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
+    const sheetName = "Kawasan";
+
+    const url = `https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`;
+
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "<table border='1' style='border-collapse:collapse;font-size:12px;width:100%'>";
+
+        if(data.length > 0){
+
+            html += "<tr>";
+            Object.keys(data[0]).forEach(key=>{
+                html += `<th style='padding:4px;background:#2e7d32;color:white;'>${key}</th>`;
+            });
+            html += "</tr>";
+
+            data.forEach(row=>{
+                html += "<tr>";
+                Object.values(row).forEach(val=>{
+                    html += `<td style='padding:4px;'>${val}</td>`;
+                });
+                html += "</tr>";
+            });
+        }
+
+        html += "</table>";
+
+        document.getElementById("dashboardContent").innerHTML = html;
+    })
+    .catch(err=>{
+        document.getElementById("dashboardContent").innerHTML =
+        "Gagal mengambil data Spreadsheet.";
+    });
+}
 // =======================
 // TOGGLE MENU SIDEBAR
 // =======================
@@ -892,6 +936,7 @@ document.getElementById("toggleSidebar").onclick = function(){
 </script>
 </body>
 </html>
+
 
 
 
