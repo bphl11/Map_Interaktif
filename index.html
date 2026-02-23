@@ -79,93 +79,51 @@ body { margin:0; font-family: Arial, sans-serif; }
     position:absolute;
     top:20px;
     left:20px;
-    width:320px;
-    height:92vh;
+    width:300px;
+    height:90vh;
     background:white;
-    border-radius:16px;
-    box-shadow:0 15px 35px rgba(0,0,0,0.15);
-    z-index:1000;
-    display:flex;
-    flex-direction:column;
-    transition:all 0.3s ease;
-    overflow:hidden;
-}
-
-/* COLLAPSED */
-#sidebar.collapsed{
-    left:-340px;
-}
-
-/* COLLAPSED */
-#sidebar.collapsed{
-    left:-300px;
-}
-
-/* TAB HEADER */
-.tab-header{
-    display:flex;
-    background:#f4f6f9;
-    border-bottom:1px solid #e0e0e0;
-}
-
-.tab-btn{
-    flex:1;
-    text-align:center;
-    padding:14px;
-    font-weight:600;
-    cursor:pointer;
-    color:#555;
-    transition:0.2s;
-}
-
-.tab-btn.active{
-    background:white;
-    color:#2e7d32;
-    border-bottom:3px solid #2e7d32;
-}
-/* TAB CONTENT */
-.tab-content{
-    flex:1;
+    border-radius:15px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
+    padding:15px;
     overflow-y:auto;
-    padding:20px;
-    background:white;
 }
 
-.accordion-header{
-    background:#f1f3f6;
-    padding:12px;
-    font-weight:600;
-    cursor:pointer;
-    border-radius:10px;
-    text-align:center;
+.menu-title{
+    font-weight:bold;
     margin-bottom:15px;
+    color:#2e7d32;
 }
 
-label{
-    font-size:13px;
-    font-weight:600;
-    color:#444;
-}
-
-.accordion-body{
-    margin-top:8px;
-    display:block;
-}
-
-/* MENU */
-.menu-item{
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:8px;
+.menu-parent{
+    padding:10px;
+    background:#f4f6f9;
+    border-radius:8px;
     cursor:pointer;
-    transition:0.2s;
-    background:#f7f9fc;
+    font-weight:600;
+    margin-top:10px;
 }
 
-.menu-item:hover{
+.menu-child{
+    display:none;
+    padding:10px 5px;
+}
+
+.menu-child div{
+    padding:8px;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+.menu-child div:hover{
     background:#e8f5e9;
 }
 
+label{
+    font-size:12px;
+    font-weight:600;
+    margin-top:10px;
+    display:block;
+}
 /* RESPONSIVE */
 @media(max-width:768px){
     #sidebar{
@@ -181,36 +139,42 @@ label{
 
 <div id="sidebar">
 
-    <div class="tab-header">
-        <div class="tab-header">
-    <div class="tab-btn active" data-tab="filterTab">Filter</div>
-    <div class="tab-btn" data-tab="dashboardTab">Dashboard</div>
-</div> 
+    <div class="menu-title">MENU</div>
 
-<div id="filterTab" class="tab-content active">
+    <!-- MONITORING -->
+    <div class="menu-group">
+        <div class="menu-parent" onclick="toggleMenu(this)">
+            📊 Monitoring ▼
+        </div>
+        <div class="menu-child">
+            <div onclick="loadPenanaman()">Laporan Penanaman</div>
+            <div onclick="loadProduksi()">Laporan Produksi</div>
+        </div>
+    </div>
 
-        <div class="accordion">
-            <div class="accordion-header">Filter Data ▼</div>
-            <div class="accordion-body">
+    <!-- FILTER -->
+    <div class="menu-group">
+        <div class="menu-parent" onclick="toggleMenu(this)">
+            🔎 Filter ▼
+        </div>
+        <div class="menu-child">
 
-                <label>Kategori Kawasan</label>
-                <select id="filterF2025" multiple style="width:100%"></select>
-                <br><br>
+            <label>Kabupaten</label>
+            <select id="filterKabupaten" multiple></select>
 
-                <label>Nama PBPH</label>
-                <select id="filterNama" multiple style="width:100%"></select>
-                <br><br>
+            <label>Kawasan</label>
+            <select id="filterF2025" multiple></select>
 
-                <label>Industri 6000 UP</label>
-                <select id="filterIndustri" multiple style="width:100%"></select>
-                <br><br>
+            <label>PBPH</label>
+            <select id="filterNama" multiple></select>
 
-                <label>Kabupaten</label>
-             <select id="filterKabupaten" multiple style="width:100%"></select>
+            <label>Industri 6000 UP</label>
+            <select id="filterIndustri" multiple></select>
 
-            </div>  
-        </div>      
-    </div>         
+        </div>
+    </div>
+
+</div>
 
     <div id="dashboardTab" class="tab-content">
         <div id="dashboardMenu">
@@ -868,7 +832,19 @@ function loadProduksi(){
 
     loadSheetData("Produksi");
 }
+// =======================
+// TOGGLE MENU SIDEBAR
+// =======================
 
+function toggleMenu(element){
+    let child = element.nextElementSibling;
+
+    if(child.style.display === "block"){
+        child.style.display = "none";
+    } else {
+        child.style.display = "block";
+    }
+}
 function loadSheetData(sheetName){
 
     const spreadsheetID = "1u9Wx1pUc2M-KzE9997_osg-8NHG5wH4etq4H9am7Rmc";
@@ -950,6 +926,7 @@ document.querySelector(".accordion-header").addEventListener("click",function(){
 </script>
 </body>
 </html>
+
 
 
 
