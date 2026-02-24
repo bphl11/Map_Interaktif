@@ -137,6 +137,29 @@ body { margin:0; font-family: Arial, sans-serif; }
 #sidebar.collapsed{
     transform: translateX(-110%);
 }
+   .sidebar-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+    padding-bottom:15px;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+}
+
+.sidebar-header img{
+    height:45px;
+}
+
+.sidebar-title .main-title{
+    font-weight:bold;
+    font-size:16px;
+    color:#1b5e20;
+}
+
+.sidebar-title .sub-title{
+    font-size:11px;
+    color:#555;
+} 
 .menu-title{
     font-weight:bold;
     margin-bottom:15px;
@@ -191,7 +214,13 @@ label{
 <button id="toggleSidebar">☰</button>
 
 <div id="sidebar">
-
+<div class="sidebar-header">
+    <img src="logo-kemenhut.png" alt="Logo Kemenhut">
+    <div class="sidebar-title">
+        <div class="main-title">BPHL XI Banjarbaru</div>
+        <div class="sub-title">Kementerian Kehutanan RI</div>
+    </div>
+</div>
     <div class="menu-title">MENU</div>
 
     <!-- MONITORING -->
@@ -1041,6 +1070,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
