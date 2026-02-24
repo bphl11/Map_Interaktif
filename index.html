@@ -900,7 +900,6 @@ $('#filterIndustri').on('change', applyFilter);
 // MENU DASHBOARD DINAMIS
 // =======================
 
-// GLOBAL CHART (SATU SAJA)
 let chartInstance = null;
 
 function parseAngka(value){
@@ -913,11 +912,19 @@ function parseAngka(value){
 }
 
 // =======================
-// LOAD PENANAMAN
+// LOAD PENANAMAN (DINAMIS TAHUN)
 // =======================
 function loadPenanaman(){
 
     document.getElementById("chartOverlay").style.display = "block";
+
+    // Hapus header lama
+    let oldTotal = document.getElementById("totalBox");
+    if(oldTotal) oldTotal.remove();
+
+    if(chartInstance){
+        chartInstance.destroy();
+    }
 
     const spreadsheetID = "1kYvLj9RiXRxZ5rpSvZw8AnNAspngHkY9CMFZKMX_Rno";
     const sheetName = "Penanaman";
@@ -926,10 +933,30 @@ function loadPenanaman(){
     .then(res => res.json())
     .then(data => {
 
-        if(!Array.isArray(data)){
+        if(!Array.isArray(data) || data.length === 0){
             alert("Data tidak terbaca.");
             return;
         }
+
+        // ======================
+        // AMBIL TAHUN OTOMATIS
+        // ======================
+        const tahun = data[0]["Tahun"] || "Tidak diketahui";
+
+        document.getElementById("chartOverlay").insertAdjacentHTML(
+            "afterbegin",
+            `<div id="totalBox" 
+                style="background:linear-gradient(90deg,#1565c0,#0d47a1);
+                       color:white;
+                       padding:10px;
+                       border-radius:8px;
+                       margin-bottom:10px;
+                       font-weight:bold;
+                       font-size:15px;
+                       text-align:center">
+                📊 PERIODE TAHUN ${tahun}
+            </div>`
+        );
 
         const labels = data.map(r => r["Nama PBPH"]);
         const rencana = data.map(r => parseAngka(r["Rencana"]));
@@ -941,10 +968,6 @@ function loadPenanaman(){
         labels.push("TOTAL");
         rencana.push(totalRencana);
         realisasi.push(totalRealisasi);
-
-        if(chartInstance){
-            chartInstance.destroy();
-        }
 
         chartInstance = new Chart(
             document.getElementById("chartKawasan"),
@@ -995,12 +1018,21 @@ function loadPenanaman(){
     });
 }
 
+
 // =======================
 // LOAD KAWASAN
 // =======================
 function loadKawasan(){
 
     document.getElementById("chartOverlay").style.display = "block";
+
+    // Hapus header lama
+    let oldTotal = document.getElementById("totalBox");
+    if(oldTotal) oldTotal.remove();
+
+    if(chartInstance){
+        chartInstance.destroy();
+    }
 
     const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
     const sheetName = "Kawasan";
@@ -1028,9 +1060,6 @@ function loadKawasan(){
         let totalHPT = HPT.reduce((a,b)=>a+b,0);
         let totalHK  = HK.reduce((a,b)=>a+b,0);
 
-        let oldTotal = document.getElementById("totalBox");
-        if(oldTotal) oldTotal.remove();
-
         document.getElementById("chartOverlay").insertAdjacentHTML(
             "afterbegin",
             `<div id="totalBox" 
@@ -1047,10 +1076,6 @@ function loadKawasan(){
                 HK: ${totalHK.toLocaleString()} Ha
             </div>`
         );
-
-        if(chartInstance){
-            chartInstance.destroy();
-        }
 
         chartInstance = new Chart(
             document.getElementById("chartKawasan"),
@@ -1070,37 +1095,13 @@ function loadKawasan(){
                     responsive:true,
                     maintainAspectRatio:false,
                     plugins:{
-                        datalabels:{
-                            anchor:'end',
-                            align:'end',
-                            rotation:-90,
-                            formatter:function(value){
-                                if(value < 50000) return '';
-                                return value.toLocaleString();
-                            },
-                            font:{ size:8 },
-                            color:'#333'
-                        },
-                        legend:{
-                            position:'top'
-                        }
+                        legend:{ position:'top' }
                     },
                     scales:{
-                        x:{
-                            stacked:true,
-                            ticks:{
-                                maxRotation:45,
-                                minRotation:45,
-                                autoSkip:false
-                            }
-                        },
-                        y:{
-                            stacked:true,
-                            beginAtZero:true
-                        }
+                        x:{ stacked:true },
+                        y:{ stacked:true, beginAtZero:true }
                     }
-                },
-                plugins:[ChartDataLabels]
+                }
             }
         );
 
@@ -1201,3 +1202,4 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
