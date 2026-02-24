@@ -900,13 +900,86 @@ $('#filterIndustri').on('change', applyFilter);
 // MENU DASHBOARD DINAMIS
 // =======================
 
-function loadPenanaman(){
-    document.getElementById("dashboardContent").innerHTML = `
-        <b>Laporan Penanaman PBPH</b><br><br>
-        <div id="penanamanTable">Loading data...</div>
-    `;
+let chartPenanamanInstance = null;
 
-    loadSheetData("Penanaman");
+function parseAngka(value){
+    if(!value) return 0;
+    return parseFloat(
+        value.toString()
+             .replace(/\./g,'')
+             .replace(',', '.')
+    ) || 0;
+}
+function loadPenanaman(){
+
+    document.getElementById("chartOverlay").style.display = "block";
+
+    const spreadsheetID = "1mXXOn8m0jDvTPOnRmSY4rE61u5mUuX21HLyxmtI8lmE";
+    const sheetName = "Penanaman";
+
+    fetch(`https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`)
+    .then(res => res.json())
+    .then(data => {
+
+        const labels = data.map(r => r["Nama PBPH"]);
+        const rencana = data.map(r => parseAngka(r["Rencana"]));
+        const realisasi = data.map(r => parseAngka(r["Realisasi"]));
+
+        let totalRencana = rencana.reduce((a,b)=>a+b,0);
+        let totalRealisasi = realisasi.reduce((a,b)=>a+b,0);
+
+        labels.push("TOTAL");
+        rencana.push(totalRencana);
+        realisasi.push(totalRealisasi);
+
+        if(chartPenanamanInstance){
+            chartPenanamanInstance.destroy();
+        }
+
+        chartPenanamanInstance = new Chart(
+            document.getElementById("chartKawasan"),
+            {
+                type:'bar',
+                data:{
+                    labels: labels,
+                    datasets:[
+                        {label:'Rencana (Ha)', data:rencana},
+                        {label:'Realisasi (Ha)', data:realisasi}
+                    ]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        legend:{ position:'top' },
+                        datalabels:{
+                            anchor:'end',
+                            align:'top',
+                            formatter:function(value){
+                                if(value < 50) return '';
+                                return value.toLocaleString();
+                            },
+                            font:{ size:8 }
+                        }
+                    },
+                    scales:{
+                        x:{
+                            ticks:{
+                                maxRotation:45,
+                                minRotation:45,
+                                autoSkip:false
+                            }
+                        },
+                        y:{
+                            beginAtZero:true
+                        }
+                    }
+                },
+                plugins:[ChartDataLabels]
+            }
+        );
+
+    });
 }
 
 function loadProduksi(){
@@ -1140,5 +1213,6 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
