@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
 <!-- SELECT2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
@@ -952,36 +952,58 @@ function loadKawasan(){
         const HPT = filtered.map(r => parseAngka(r["HPT (Ha)"]));
         const HK  = filtered.map(r => parseAngka(r["HK (Ha)"]));
 
+// HITUNG TOTAL 
+let totalHL = HL.reduce((a,b)=>a+b,0);
+let totalHP = HP.reduce((a,b)=>a+b,0);
+let totalHPK = HPK.reduce((a,b)=>a+b,0);
+let totalHPT = HPT.reduce((a,b)=>a+b,0);
+let totalHK = HK.reduce((a,b)=>a+b,0);
+
+// Tambahkan label TOTAL
+labels.push("TOTAL");
+HL.push(totalHL);
+HP.push(totalHP);
+HPK.push(totalHPK);
+HPT.push(totalHPT);
+HK.push(totalHK);
         if(chartKawasanInstance){
             chartKawasanInstance.destroy();
         }
 
-        chartKawasanInstance = new Chart(
-            document.getElementById("chartKawasan"),
-            {
-                type:'bar',
-                data:{
-                    labels: labels,
-                    datasets:[
-                        {label:'HL',  data:HL},
-                        {label:'HP',  data:HP},
-                        {label:'HPK', data:HPK},
-                        {label:'HPT', data:HPT},
-                        {label:'HK',  data:HK}
-                    ]
-                },
-                options:{
-                    responsive:true,
-                    maintainAspectRatio:false,
-                    scales:{
-                        y:{ beginAtZero:true }
-                    }
+       chartKawasanInstance = new Chart(
+    document.getElementById("chartKawasan"),
+    {
+        type:'bar',
+        data:{
+            labels: labels,
+            datasets:[
+                {label:'HL',  data:HL},
+                {label:'HP',  data:HP},
+                {label:'HPK', data:HPK},
+                {label:'HPT', data:HPT},
+                {label:'HK',  data:HK}
+            ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                datalabels:{
+                    anchor:'end',
+                    align:'top',
+                    formatter:function(value){
+                        return value.toLocaleString();
+                    },
+                    font:{ size:9 }
                 }
+            },
+            scales:{
+                y:{ beginAtZero:true }
             }
-        );
-
-    });
-}
+        },
+        plugins:[ChartDataLabels]
+    }
+);
 
 function tutupChart(){
     document.getElementById("chartOverlay").style.display = "none";
@@ -1078,6 +1100,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
