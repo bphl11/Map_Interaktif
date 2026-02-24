@@ -985,15 +985,6 @@ function loadPenanaman(){
                     maintainAspectRatio:false,
                     plugins:{
                         legend:{ position:'top' },
-                        datalabels:{
-                            anchor:'end',
-                            align:'top',
-                            formatter:function(value){
-                                if(value < 50) return '';
-                                return value.toLocaleString();
-                            },
-                            font:{ size:8 }
-                        }
                     },
                     scales:{
                         x:{
@@ -1008,7 +999,7 @@ function loadPenanaman(){
                         }
                     }
                 },
-                plugins:[ChartDataLabels]
+                
             }
         );
 
@@ -1229,5 +1220,6 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 </body>
 </html>
+
 
 
