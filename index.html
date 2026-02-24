@@ -900,7 +900,8 @@ $('#filterIndustri').on('change', applyFilter);
 // MENU DASHBOARD DINAMIS
 // =======================
 
-let chartPenanamanInstance = null;
+// GLOBAL CHART (SATU SAJA)
+let chartInstance = null;
 
 function parseAngka(value){
     if(!value) return 0;
@@ -910,14 +911,13 @@ function parseAngka(value){
              .replace(',', '.')
     ) || 0;
 }
+
+// =======================
+// LOAD PENANAMAN
+// =======================
 function loadPenanaman(){
 
     document.getElementById("chartOverlay").style.display = "block";
-
-    // Hancurkan chart lain jika ada
-    if(chartKawasanInstance){
-        chartKawasanInstance.destroy();
-    }
 
     const spreadsheetID = "1kYvLj9RiXRxZ5rpSvZw8AnNAspngHkY9CMFZKMX_Rno";
     const sheetName = "Penanaman";
@@ -942,11 +942,11 @@ function loadPenanaman(){
         rencana.push(totalRencana);
         realisasi.push(totalRealisasi);
 
-        if(chartPenanamanInstance){
-            chartPenanamanInstance.destroy();
+        if(chartInstance){
+            chartInstance.destroy();
         }
 
-        chartPenanamanInstance = new Chart(
+        chartInstance = new Chart(
             document.getElementById("chartKawasan"),
             {
                 type:'bar',
@@ -994,25 +994,10 @@ function loadPenanaman(){
         console.log("Error ambil data:", err);
     });
 }
-function loadProduksi(){
-    document.getElementById("dashboardContent").innerHTML = `
-        <b>Laporan Produksi PBPHH</b><br><br>
-        <div id="produksiTable">Loading data...</div>
-    `;
 
-    loadSheetData("Produksi");
-}
-let chartKawasanInstance = null;
-
-function parseAngka(value){
-    if(!value) return 0;
-    return parseFloat(
-        value.toString()
-             .replace(/\./g,'')
-             .replace(',', '.')
-    ) || 0;
-}
-
+// =======================
+// LOAD KAWASAN
+// =======================
 function loadKawasan(){
 
     document.getElementById("chartOverlay").style.display = "block";
@@ -1037,41 +1022,37 @@ function loadKawasan(){
         const HPT = filtered.map(r => parseAngka(r["HPT (Ha)"]));
         const HK  = filtered.map(r => parseAngka(r["HK (Ha)"]));
 
-        // ======================
-        // HITUNG TOTAL
-        // ======================
         let totalHL  = HL.reduce((a,b)=>a+b,0);
         let totalHP  = HP.reduce((a,b)=>a+b,0);
         let totalHPK = HPK.reduce((a,b)=>a+b,0);
         let totalHPT = HPT.reduce((a,b)=>a+b,0);
         let totalHK  = HK.reduce((a,b)=>a+b,0);
-        
-        // Hapus total lama jika ada
-let oldTotal = document.getElementById("totalBox");
-if(oldTotal) oldTotal.remove();
 
-// Tampilkan total sebagai teks
-document.getElementById("chartOverlay").insertAdjacentHTML(
-    "afterbegin",
-    `<div id="totalBox" 
-        style="background:#e8f5e9;
-               padding:10px;
-               border-radius:8px;
-               margin-bottom:10px;
-               font-weight:bold;
-               font-size:13px">
-        TOTAL HL: ${totalHL.toLocaleString()} Ha |
-        HP: ${totalHP.toLocaleString()} Ha |
-        HPK: ${totalHPK.toLocaleString()} Ha |
-        HPT: ${totalHPT.toLocaleString()} Ha |
-        HK: ${totalHK.toLocaleString()} Ha
-    </div>`
-);
-        if(chartKawasanInstance){
-            chartKawasanInstance.destroy();
+        let oldTotal = document.getElementById("totalBox");
+        if(oldTotal) oldTotal.remove();
+
+        document.getElementById("chartOverlay").insertAdjacentHTML(
+            "afterbegin",
+            `<div id="totalBox" 
+                style="background:#e8f5e9;
+                       padding:10px;
+                       border-radius:8px;
+                       margin-bottom:10px;
+                       font-weight:bold;
+                       font-size:13px">
+                TOTAL HL: ${totalHL.toLocaleString()} Ha |
+                HP: ${totalHP.toLocaleString()} Ha |
+                HPK: ${totalHPK.toLocaleString()} Ha |
+                HPT: ${totalHPT.toLocaleString()} Ha |
+                HK: ${totalHK.toLocaleString()} Ha
+            </div>`
+        );
+
+        if(chartInstance){
+            chartInstance.destroy();
         }
 
-        chartKawasanInstance = new Chart(
+        chartInstance = new Chart(
             document.getElementById("chartKawasan"),
             {
                 type:'bar',
@@ -1085,53 +1066,48 @@ document.getElementById("chartOverlay").insertAdjacentHTML(
                         {label:'HK',  data:HK}
                     ]
                 },
-               options:{
-    responsive:true,
-    maintainAspectRatio:false,
-    plugins:{
-        datalabels:{
-            anchor:'end',
-            align:'end',
-            rotation:-90,
-            formatter:function(value){
-                if(value < 50000) return '';
-                return value.toLocaleString();
-            },
-            font:{ size:8 },
-            color:'#333'
-        },
-        legend:{
-            position:'top'
-        }
-    },
-   scales:{
-    x:{
-        stacked:true,
-        ticks:{
-            maxRotation:45,
-            minRotation:45,
-            autoSkip:false
-        }
-    },
-    y:{
-        stacked:true,
-        beginAtZero:true
-    }
-}
-},
-plugins:[ChartDataLabels]            }
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        datalabels:{
+                            anchor:'end',
+                            align:'end',
+                            rotation:-90,
+                            formatter:function(value){
+                                if(value < 50000) return '';
+                                return value.toLocaleString();
+                            },
+                            font:{ size:8 },
+                            color:'#333'
+                        },
+                        legend:{
+                            position:'top'
+                        }
+                    },
+                    scales:{
+                        x:{
+                            stacked:true,
+                            ticks:{
+                                maxRotation:45,
+                                minRotation:45,
+                                autoSkip:false
+                            }
+                        },
+                        y:{
+                            stacked:true,
+                            beginAtZero:true
+                        }
+                    }
+                },
+                plugins:[ChartDataLabels]
+            }
         );
 
-    }) 
-
+    })
     .catch(err=>{
         console.log("Gagal ambil data:", err);
     });
-    
-    } 
- 
-function tutupChart(){
-    document.getElementById("chartOverlay").style.display = "none";
 }
 // =======================
 // TOGGLE MENU SIDEBAR
@@ -1225,10 +1201,3 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
