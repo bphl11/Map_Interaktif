@@ -914,6 +914,11 @@ function loadPenanaman(){
 
     document.getElementById("chartOverlay").style.display = "block";
 
+    // Hancurkan chart lain jika ada
+    if(chartKawasanInstance){
+        chartKawasanInstance.destroy();
+    }
+
     const spreadsheetID = "1kYvLj9RiXRxZ5rpSvZw8AnNAspngHkY9CMFZKMX_Rno";
     const sheetName = "Penanaman";
 
@@ -921,9 +926,12 @@ function loadPenanaman(){
     .then(res => res.json())
     .then(data => {
 
-        const labels = data.map(r => r["Nama PBPH"]);
+        if(!Array.isArray(data)){
+            alert("Data tidak terbaca.");
+            return;
+        }
 
-        // PAKAI parseAngka untuk format Indonesia
+        const labels = data.map(r => r["Nama PBPH"]);
         const rencana = data.map(r => parseAngka(r["Rencana"]));
         const realisasi = data.map(r => parseAngka(r["Realisasi"]));
 
@@ -1217,6 +1225,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
