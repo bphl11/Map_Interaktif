@@ -302,7 +302,13 @@ function tampilkanDiagramSemua(){
 // BASEMAP
 // =======================
 
-var map = L.map('map').setView([-3.3,114.6],7);
+var map = L.map('map', {
+    zoomControl: false   
+}).setView([-3.3,114.6],7);
+
+L.control.zoom({
+    position: 'topright'
+}).addTo(map);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; OpenStreetMap contributors'
 }).addTo(map);
@@ -343,8 +349,7 @@ function onLocationError(e) {
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
-// CARA BENAR BUAT CONTROL
-var locateControl = L.control({position: 'topleft'});
+var locateControl = L.control({position: 'topright'});
 
 locateControl.onAdd = function(map){
     var btn = L.DomUtil.create('button');
@@ -1036,6 +1041,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
