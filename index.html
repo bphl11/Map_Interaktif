@@ -91,6 +91,11 @@ body { margin:0; font-family: Arial, sans-serif; }
 }
   /* TOGGLE BUTTON */
 #toggleSidebar{
+    position:absolute;
+    top:20px;
+    left:320px;   /* sesuaikan dengan lebar sidebar */
+    z-index:2000;
+
     background:white;
     border:none;
     width:35px;
@@ -98,9 +103,14 @@ body { margin:0; font-family: Arial, sans-serif; }
     border-radius:8px;
     cursor:pointer;
     font-size:18px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    transition:0.3s;
 }
 
+/* Saat sidebar ditutup */
+#sidebar.collapsed + #toggleSidebar{
+    left:20px;
+}
 /* SIDEBAR */
 #sidebar{
     position:absolute;
@@ -209,24 +219,21 @@ label{
     <button onclick="tutupChart()">✖</button>
     <canvas id="chartKawasan"></canvas>
 </div>
-<div id="sidebar">
+<div class="sidebar-header">
 
-    <div class="sidebar-header">
-
-        <div class="logo-area">
-            <img src="logo-kemenhut.png">
-            <div class="sidebar-title">
-                <div class="main-title">BPHL XI Banjarbaru</div>
-                <div class="sub-title">Kementerian Kehutanan RI</div>
-            </div>
+    <div class="logo-area">
+        <img src="logo-kemenhut.png">
+        <div class="sidebar-title">
+            <div class="main-title">BPHL XI Banjarbaru</div>
+            <div class="sub-title">Kementerian Kehutanan RI</div>
         </div>
-
-        <button id="toggleSidebar">☰</button>
-
     </div>
 
-    <div class="menu-title">MENU</div>
+</div>
 
+    <div class="menu-title">MENU</div>
+    </div>
+button id="toggleSidebar">☰</button>
     <!-- MONITORING -->
     <div class="menu-group">
         <div class="menu-parent" onclick="toggleMenu(this)">
@@ -1074,6 +1081,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
