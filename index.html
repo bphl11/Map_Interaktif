@@ -952,59 +952,69 @@ function loadKawasan(){
         const HPT = filtered.map(r => parseAngka(r["HPT (Ha)"]));
         const HK  = filtered.map(r => parseAngka(r["HK (Ha)"]));
 
-// HITUNG TOTAL 
-let totalHL = HL.reduce((a,b)=>a+b,0);
-let totalHP = HP.reduce((a,b)=>a+b,0);
-let totalHPK = HPK.reduce((a,b)=>a+b,0);
-let totalHPT = HPT.reduce((a,b)=>a+b,0);
-let totalHK = HK.reduce((a,b)=>a+b,0);
+        // ======================
+        // HITUNG TOTAL
+        // ======================
+        let totalHL  = HL.reduce((a,b)=>a+b,0);
+        let totalHP  = HP.reduce((a,b)=>a+b,0);
+        let totalHPK = HPK.reduce((a,b)=>a+b,0);
+        let totalHPT = HPT.reduce((a,b)=>a+b,0);
+        let totalHK  = HK.reduce((a,b)=>a+b,0);
 
-// Tambahkan label TOTAL
-labels.push("TOTAL");
-HL.push(totalHL);
-HP.push(totalHP);
-HPK.push(totalHPK);
-HPT.push(totalHPT);
-HK.push(totalHK);
+        labels.push("TOTAL");
+        HL.push(totalHL);
+        HP.push(totalHP);
+        HPK.push(totalHPK);
+        HPT.push(totalHPT);
+        HK.push(totalHK);
+
         if(chartKawasanInstance){
             chartKawasanInstance.destroy();
         }
 
-       chartKawasanInstance = new Chart(
-    document.getElementById("chartKawasan"),
-    {
-        type:'bar',
-        data:{
-            labels: labels,
-            datasets:[
-                {label:'HL',  data:HL},
-                {label:'HP',  data:HP},
-                {label:'HPK', data:HPK},
-                {label:'HPT', data:HPT},
-                {label:'HK',  data:HK}
-            ]
-        },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            plugins:{
-                datalabels:{
-                    anchor:'end',
-                    align:'top',
-                    formatter:function(value){
-                        return value.toLocaleString();
+        chartKawasanInstance = new Chart(
+            document.getElementById("chartKawasan"),
+            {
+                type:'bar',
+                data:{
+                    labels: labels,
+                    datasets:[
+                        {label:'HL',  data:HL},
+                        {label:'HP',  data:HP},
+                        {label:'HPK', data:HPK},
+                        {label:'HPT', data:HPT},
+                        {label:'HK',  data:HK}
+                    ]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        datalabels:{
+                            anchor:'end',
+                            align:'top',
+                            formatter:function(value){
+                                return value.toLocaleString();
+                            },
+                            font:{ size:9 }
+                        }
                     },
-                    font:{ size:9 }
-                }
-            },
-            scales:{
-                y:{ beginAtZero:true }
+                    scales:{
+                        y:{ beginAtZero:true }
+                    }
+                },
+                plugins:[ChartDataLabels]
             }
-        },
-        plugins:[ChartDataLabels]
-    }
-);
+        );
 
+    }) 
+
+    .catch(err=>{
+        console.log("Gagal ambil data:", err);
+    });
+    
+    } 
+ 
 function tutupChart(){
     document.getElementById("chartOverlay").style.display = "none";
 }
@@ -1100,73 +1110,3 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
