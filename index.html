@@ -922,7 +922,9 @@ function loadPenanaman(){
     .then(data => {
 
         const labels = data.map(r => r["Nama PBPH"]);
-        const rencana = data.map(r => Number(r["Rencana"]));
+
+        // PAKAI parseAngka untuk format Indonesia
+        const rencana = data.map(r => parseAngka(r["Rencana"]));
         const realisasi = data.map(r => parseAngka(r["Realisasi"]));
 
         let totalRencana = rencana.reduce((a,b)=>a+b,0);
@@ -979,9 +981,11 @@ function loadPenanaman(){
             }
         );
 
+    })
+    .catch(err=>{
+        console.log("Error ambil data:", err);
     });
 }
-
 function loadProduksi(){
     document.getElementById("dashboardContent").innerHTML = `
         <b>Laporan Produksi PBPHH</b><br><br>
@@ -1213,6 +1217,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
