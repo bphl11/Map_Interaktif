@@ -219,21 +219,20 @@ label{
     <button onclick="tutupChart()">✖</button>
     <canvas id="chartKawasan"></canvas>
 </div>
-<div class="sidebar-header">
+<div id="sidebar">
 
-    <div class="logo-area">
-        <img src="logo-kemenhut.png">
-        <div class="sidebar-title">
-            <div class="main-title">BPHL XI Banjarbaru</div>
-            <div class="sub-title">Kementerian Kehutanan RI</div>
+    <div class="sidebar-header">
+        <div class="logo-area">
+            <img src="logo-kemenhut.png">
+            <div class="sidebar-title">
+                <div class="main-title">BPHL XI Banjarbaru</div>
+                <div class="sub-title">Kementerian Kehutanan RI</div>
+            </div>
         </div>
     </div>
 
-</div>
-
     <div class="menu-title">MENU</div>
-    </div>
-button id="toggleSidebar">☰</button>
+
     <!-- MONITORING -->
     <div class="menu-group">
         <div class="menu-parent" onclick="toggleMenu(this)">
@@ -242,7 +241,7 @@ button id="toggleSidebar">☰</button>
         <div class="menu-child">
             <div onclick="loadKawasan()">Luas Kawasan Hutan</div>
             <div onclick="loadPenanaman()">Penanaman PBPH</div>
-             <div onclick="loadProduksi()">Produksi PBPH</div>
+            <div onclick="loadProduksi()">Produksi PBPH</div>
             <div onclick="loadProduksi()">Produksi Industri 6000 UP</div>
         </div>
     </div>
@@ -265,13 +264,13 @@ button id="toggleSidebar">☰</button>
 
             <label>Industri 6000 UP</label>
             <select id="filterIndustri" multiple></select>
-<hr>
 
         </div>
     </div>
 
 </div>
 
+<button id="toggleSidebar">☰</button>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <!-- JQUERY WAJIB -->
@@ -1081,6 +1080,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
