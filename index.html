@@ -216,7 +216,7 @@ label{
 
 <div id="map"></div>
     <div id="chartOverlay">
-    <button onclick="tutupChart()">✖</button>
+    <button id="btnCloseChart">✖</button>
     <canvas id="chartKawasan"></canvas>
 </div>
 <div id="sidebar">
@@ -1198,8 +1198,36 @@ document.addEventListener("mousemove", function(e){
 document.addEventListener("mouseup", function(){
     isDragging = false;
 });
+// =======================
+// CLOSE OVERLAY FINAL FIX
+// =======================
+document.addEventListener("DOMContentLoaded", function(){
 
+    const btnClose = document.getElementById("btnCloseChart");
+    const overlay = document.getElementById("chartOverlay");
+
+    if(btnClose){
+        btnClose.addEventListener("click", function(){
+
+            // Tutup overlay
+            overlay.style.display = "none";
+
+            // Hapus header jika ada
+            let oldTotal = document.getElementById("totalBox");
+            if(oldTotal) oldTotal.remove();
+
+            // Hancurkan chart supaya bersih
+            if(typeof chartInstance !== "undefined" && chartInstance){
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+
+        });
+    }
+
+});
 </script>
 </body>
 </html>
+
 
