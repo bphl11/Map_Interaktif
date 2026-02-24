@@ -91,18 +91,14 @@ body { margin:0; font-family: Arial, sans-serif; }
 }
   /* TOGGLE BUTTON */
 #toggleSidebar{
-    position:absolute;
-    top:03px;
-    left:70px;  
-    z-index:1100;
     background:white;
     border:none;
-    width:40px;
-    height:40px;
+    width:35px;
+    height:35px;
     border-radius:8px;
-    box-shadow:0 3px 8px rgba(0,0,0,0.3);
-    font-size:18px;
     cursor:pointer;
+    font-size:18px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
 /* SIDEBAR */
@@ -140,12 +136,14 @@ body { margin:0; font-family: Arial, sans-serif; }
    .sidebar-header{
     display:flex;
     align-items:center;
-    gap:10px;
-    margin-bottom:20px;
-    padding-bottom:15px;
-    border-bottom:1px solid rgba(0,0,0,0.1);
+    justify-content:space-between;
 }
-
+    .logo-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+    
 .sidebar-header img{
     height:45px;
 }
@@ -211,16 +209,22 @@ label{
     <button onclick="tutupChart()">✖</button>
     <canvas id="chartKawasan"></canvas>
 </div>
-<button id="toggleSidebar">☰</button>
-
 <div id="sidebar">
-<div class="sidebar-header">
-    <img src="logo-kemenhut.png" alt="Logo Kemenhut">
-    <div class="sidebar-title">
-        <div class="main-title">BPHL XI Banjarbaru</div>
-        <div class="sub-title">Kementerian Kehutanan RI</div>
+
+    <div class="sidebar-header">
+
+        <div class="logo-area">
+            <img src="logo-kemenhut.png">
+            <div class="sidebar-title">
+                <div class="main-title">BPHL XI Banjarbaru</div>
+                <div class="sub-title">Kementerian Kehutanan RI</div>
+            </div>
+        </div>
+
+        <button id="toggleSidebar">☰</button>
+
     </div>
-</div>
+
     <div class="menu-title">MENU</div>
 
     <!-- MONITORING -->
@@ -1070,6 +1074,7 @@ document.addEventListener("mouseup", function(){
 </script>
 </body>
 </html>
+
 
 
 
