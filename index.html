@@ -415,6 +415,43 @@ var satellite = L.tileLayer(
 
 // Default tampil OSM
 osm.addTo(map);
+
+// =======================
+// MODE STYLE OTOMATIS
+// =======================
+
+// Mode Transparan (Satelit)
+function setTransparentMode(){
+
+    pbphLayer.eachLayer(function(layer){
+        layer.setStyle({
+            weight: 1,
+            fillOpacity: 0.12,
+            opacity: 0.6
+        });
+    });
+
+    kawasanLayer.eachLayer(function(layer){
+        layer.setStyle({
+            weight: 1,
+            fillOpacity: 0.12,
+            opacity: 0.6
+        });
+    });
+}
+
+// Mode Normal (OSM)
+function setNormalMode(){
+
+    pbphLayer.eachLayer(function(layer){
+        layer.setStyle(stylePBPH());
+    });
+
+    kawasanLayer.eachLayer(function(layer){
+        layer.setStyle(styleKawasan(layer.feature));
+    });
+}
+
 // =======================
 // TOGGLE SATELIT MODERN
 // =======================
@@ -444,15 +481,24 @@ satelliteControl.onAdd = function(map){
         L.DomEvent.stopPropagation(e);
 
         if(!isSatellite){
+
             map.removeLayer(osm);
             satellite.addTo(map);
+
             btn.style.background = "#1565c0";
             btn.style.color = "white";
+
+            setTransparentMode();  // 🔥 Transparan saat satelit
+
         } else {
+
             map.removeLayer(satellite);
             osm.addTo(map);
+
             btn.style.background = "white";
             btn.style.color = "black";
+
+            setNormalMode();       // 🔥 Normal saat OSM
         }
 
         isSatellite = !isSatellite;
@@ -462,7 +508,6 @@ satelliteControl.onAdd = function(map){
 };
 
 satelliteControl.addTo(map);
-
 // =======================
 // FITUR POSISI SAYA
 // =======================
@@ -1452,6 +1497,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
