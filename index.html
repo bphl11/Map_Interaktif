@@ -1157,7 +1157,7 @@ function loadKawasan(){
 // =======================
 // LOAD PRODUKSI KAYU BULAT
 // =======================
-    function loadProduksi(){
+   function loadProduksi(){
 
     document.getElementById("chartOverlay").style.display = "block";
 
@@ -1168,8 +1168,8 @@ function loadKawasan(){
         chartInstance.destroy();
     }
 
-    const spreadsheetID = "1j1cpMuO0i8Nh7cId1loAKYOHn6J9RSNT3zmT3t4VU";
-    const sheetName = "Produksi Kayu Bulat";
+    const spreadsheetID = "11jcpMuO0i8Nh7cId1loAKYOHn6J9jRSNT3lzmT3t4VU";
+    const sheetName = "Produksi%20Kayu%20Bulat";
 
     fetch(`https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`)
     .then(res => res.json())
@@ -1199,20 +1199,13 @@ function loadKawasan(){
 
         const labels = data.map(r => r["Nama PBPH"]);
 
-        // Ambil volume berdasarkan urutan kolom
-        const rencana = data.map(r => {
-            let value = Object.values(r)[3]; // kolom Rencana Volume
-            return parseFloat(
-                value?.toString().replace(/\./g,'').replace(',', '.') || 0
-            );
-        });
+        const rencana = data.map(r =>
+            parseAngka(r["Volume"])
+        );
 
-        const realisasi = data.map(r => {
-            let value = Object.values(r)[5]; // kolom Realisasi Volume
-            return parseFloat(
-                value?.toString().replace(/\./g,'').replace(',', '.') || 0
-            );
-        });
+        const realisasi = data.map(r =>
+            parseAngka(r["Volume_1"])
+        );
 
         let totalRencana = rencana.reduce((a,b)=>a+b,0);
         let totalRealisasi = realisasi.reduce((a,b)=>a+b,0);
@@ -1398,4 +1391,5 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
