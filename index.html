@@ -1548,6 +1548,7 @@ function closeSidebarMobile(){
 var routingControl = null;
 var routingActive = false;
 var routingPoints = [];
+var routingBtnElement = null;
 
 // Tombol Toggle Routing
 var routingButton = L.control({position:'topright'});
@@ -1555,6 +1556,8 @@ var routingButton = L.control({position:'topright'});
 routingButton.onAdd = function(map){
 
     var btn = L.DomUtil.create('button','routing-btn');
+
+    routingBtnElement = btn; // SIMPAN REFERENCE TOMBOL
 
     btn.innerHTML = "🧭";
     btn.title = "Aktifkan Routing";
@@ -1568,10 +1571,10 @@ routingButton.onAdd = function(map){
         btn.classList.toggle("active");
 
         if(routingActive){
-           L.popup()
- .setLatLng(map.getCenter())
- .setContent("Klik titik A lalu titik B")
- .openOn(map);
+            L.popup()
+                .setLatLng(map.getCenter())
+                .setContent("Klik titik A lalu titik B")
+                .openOn(map);
         } else {
             resetRouting();
         }
@@ -1579,6 +1582,7 @@ routingButton.onAdd = function(map){
 
     return btn;
 };
+
 routingButton.addTo(map);
 
 // Klik Map untuk A → B
@@ -1606,19 +1610,16 @@ map.on('click', function(e){
 
         routingControl.on('routesfound', function(e){
 
-            var route = e.routes[0];
-            var distance = (route.summary.totalDistance / 1000).toFixed(2);
+    var route = e.routes[0];
+    var distance = (route.summary.totalDistance / 1000).toFixed(2);
 
-            L.popup()
-                .setLatLng(routingPoints[1])
-                .setContent("📏 Jarak: <b>" + distance + " km</b>")
-                .openOn(map);
-        });
+    // Ambil koordinat akhir dari route
+    var lastCoord = route.coordinates[route.coordinates.length - 1];
 
-        routingPoints = [];
-        routingActive = false;
-        document.querySelectorAll('.routing-btn')[0].classList.remove("active");
-    }
+    L.popup()
+        .setLatLng([lastCoord.lat, lastCoord.lng])
+        .setContent("📏 Jarak: <b>" + distance + " km</b>")
+        .openOn(map);
 });
 
 // =======================
@@ -1634,6 +1635,7 @@ function resetRouting(){
     routingPoints = [];
     routingActive = false;
 
+    // HAPUS ACTIVE CLASS DARI TOMBOL
     if(routingBtnElement){
         routingBtnElement.classList.remove("active");
     }
@@ -1644,4 +1646,5 @@ function resetRouting(){
 </script>
 </body>
 </html>
+
 
