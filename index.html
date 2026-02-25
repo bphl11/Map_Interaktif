@@ -991,11 +991,9 @@ function loadPenanaman(){
             return;
         }
 
-// ======================
-// AMBIL PERIODE OTOMATIS
-// ======================
-const firstData = data.find(row => row["Periode"] && row["Periode"] !== "");
-const periode = firstData ? firstData["Periode"] : "";
+// Ambil periode otomatis dari kolom "Periode"
+const firstRow = data.find(row => row["Periode"]);
+const periode = firstRow ? firstRow["Periode"] : "";
 
 // Filter baris kosong supaya grafik bersih
 data = data.filter(row => row["Nama PBPH"] && row["Nama PBPH"] !== "");
@@ -1395,6 +1393,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
