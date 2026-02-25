@@ -1180,22 +1180,22 @@ function loadKawasan(){
             return;
         }
 
-        const periode = data[0]["Periode"] || "2025";
+        const periode = data[0]["Periode"] || "";
 
-        document.getElementById("chartOverlay").insertAdjacentHTML(
-            "afterbegin",
-            `<div id="totalBox" 
-                style="background:linear-gradient(90deg,#2e7d32,#1b5e20);
-                       color:white;
-                       padding:10px;
-                       border-radius:8px;
-                       margin-bottom:10px;
-                       font-weight:bold;
-                       font-size:15px;
-                       text-align:center">
-                📦 PRODUKSI PBPH - ${periode}
-            </div>`
-        );
+document.getElementById("chartOverlay").insertAdjacentHTML(
+    "afterbegin",
+    `<div id="totalBox" 
+        style="background:linear-gradient(90deg,#2e7d32,#1b5e20);
+               color:white;
+               padding:10px;
+               border-radius:8px;
+               margin-bottom:10px;
+               font-weight:bold;
+               font-size:15px;
+               text-align:center">
+        📦 PRODUKSI KAYU BULAT PBPH PERIODE ${periode}
+    </div>`
+);
 
       const labels = data.map(r => r["Nama PBPH"]);
 
@@ -1391,6 +1391,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
