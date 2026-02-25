@@ -991,11 +991,10 @@ function loadPenanaman(){
             return;
         }
 
-// Ambil periode otomatis dari kolom "Periode"
-const firstRow = data.find(row => row["Periode"]);
-const periode = firstRow ? firstRow["Periode"] : "";
+// Ambil periode dari C2
+const periode = data[0]["Periode"] || "";
 
-// Filter baris kosong supaya grafik bersih
+// Filter baris kosong
 data = data.filter(row => row["Nama PBPH"] && row["Nama PBPH"] !== "");
 
 document.getElementById("chartOverlay").insertAdjacentHTML(
@@ -1393,6 +1392,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
