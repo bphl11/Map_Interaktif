@@ -7,8 +7,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 <!-- SELECT2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
@@ -264,7 +267,52 @@ label{
         font-size:15px;
         padding:10px;
     }
+}
+/* =========================
+   ROUTING BUTTON MODERN
+========================= */
 
+.leaflet-control button {
+    transition: all 0.2s ease;
+}
+
+.leaflet-control button:hover {
+    transform: scale(1.05);
+}
+
+.routing-btn {
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 18px;
+}
+
+.routing-btn.active {
+    background: #2e7d32;
+    color: white;
+    border-color: #2e7d32;
+}
+
+.leaflet-routing-container {
+    display: none !important;
+}
+
+.leaflet-routing-alt {
+    display: none !important;
+}
+
+.distance-popup {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1565c0;
+    text-align: center;
 }
 </style>
 </head>
@@ -326,11 +374,9 @@ label{
 
 <button id="toggleSidebar">☰</button>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-<!-- JQUERY WAJIB -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- SELECT2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
@@ -1305,13 +1351,13 @@ document.getElementById("chartOverlay").insertAdjacentHTML(
 );
 
       const labels = data.map(r => r["Nama PBPH"]);
-
+        
 const rencana = data.map(r =>
-    parseAngka(r[""])
+    parseAngka(r["Rencana"])
 );
 
 const realisasi = data.map(r =>
-    parseAngka(r["undefined"])
+    parseAngka(r["Realisasi"])
 );
 
         let totalRencana = rencana.reduce((a,b)=>a+b,0);
@@ -1495,18 +1541,107 @@ function closeSidebarMobile(){
         document.getElementById("sidebar").classList.remove("active");
     }
 }
+    // =======================
+// ROUTING MODE PROFESIONAL
+// =======================
+
+var routingControl = null;
+var routingActive = false;
+var routingPoints = [];
+
+// Tombol Toggle Routing
+var routingButton = L.control({position:'topright'});
+
+routingButton.onAdd = function(map){
+
+    var btn = L.DomUtil.create('button','routing-btn');
+
+    btn.innerHTML = "🧭";
+    btn.title = "Aktifkan Routing";
+
+    btn.onclick = function(e){
+
+        L.DomEvent.stopPropagation(e);
+
+        routingActive = !routingActive;
+
+        btn.classList.toggle("active");
+
+        if(routingActive){
+           L.popup()
+ .setLatLng(map.getCenter())
+ .setContent("Klik titik A lalu titik B")
+ .openOn(map);
+        } else {
+            resetRouting();
+        }
+    };
+
+    return btn;
+};
+routingButton.addTo(map);
+
+// Klik Map untuk A → B
+map.on('click', function(e){
+
+    if(!routingActive) return;
+
+    routingPoints.push(e.latlng);
+
+    if(routingPoints.length === 2){
+
+        if(routingControl){
+            map.removeControl(routingControl);
+        }
+
+        routingControl = L.Routing.control({
+            waypoints: routingPoints,
+            routeWhileDragging: false,
+            show: false,
+            addWaypoints: false,
+            lineOptions:{
+                styles:[{color:'#1565c0', weight:5}]
+            }
+        }).addTo(map);
+
+        routingControl.on('routesfound', function(e){
+
+            var route = e.routes[0];
+            var distance = (route.summary.totalDistance / 1000).toFixed(2);
+
+            L.popup()
+                .setLatLng(routingPoints[1])
+                .setContent("📏 Jarak: <b>" + distance + " km</b>")
+                .openOn(map);
+        });
+
+        routingPoints = [];
+        routingActive = false;
+        document.querySelectorAll('.routing-btn')[0].classList.remove("active");
+    }
+});
+
+// =======================
+// RESET ROUTING FUNCTION
+// =======================
+function resetRouting(){
+
+    if(routingControl){
+        map.removeControl(routingControl);
+        routingControl = null;
+    }
+
+    routingPoints = [];
+    routingActive = false;
+
+    if(routingBtnElement){
+        routingBtnElement.classList.remove("active");
+    }
+
+    map.closePopup();
+}
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 
