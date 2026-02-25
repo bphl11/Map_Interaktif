@@ -399,9 +399,69 @@ var map = L.map('map', {
 L.control.zoom({
     position: 'topright'
 }).addTo(map);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution:'&copy; OpenStreetMap contributors'
-}).addTo(map);
+// =======================
+// BASEMAP OSM & SATELIT
+// =======================
+
+var osm = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap contributors'
+});
+
+var satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
+    attribution:'Tiles © Esri'
+});
+
+// Default tampil OSM
+osm.addTo(map);
+// =======================
+// TOGGLE SATELIT MODERN
+// =======================
+
+var isSatellite = false;
+
+var satelliteControl = L.control({position:'topright'});
+
+satelliteControl.onAdd = function(map){
+
+    var btn = L.DomUtil.create('button');
+
+    btn.innerHTML = "🛰️";
+    btn.title = "Toggle Citra Satelit";
+
+    btn.style.background = "white";
+    btn.style.width = "38px";
+    btn.style.height = "38px";
+    btn.style.border = "2px solid #ccc";
+    btn.style.borderRadius = "8px";
+    btn.style.cursor = "pointer";
+    btn.style.fontSize = "18px";
+    btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+
+    btn.onclick = function(e){
+
+        L.DomEvent.stopPropagation(e);
+
+        if(!isSatellite){
+            map.removeLayer(osm);
+            satellite.addTo(map);
+            btn.style.background = "#1565c0";
+            btn.style.color = "white";
+        } else {
+            map.removeLayer(satellite);
+            osm.addTo(map);
+            btn.style.background = "white";
+            btn.style.color = "black";
+        }
+
+        isSatellite = !isSatellite;
+    };
+
+    return btn;
+};
+
+satelliteControl.addTo(map);
 
 // =======================
 // FITUR POSISI SAYA
@@ -1392,6 +1452,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
