@@ -1180,8 +1180,8 @@ function loadKawasan(){
             return;
         }
 
-        const periode = data[0]["Periode"] || "";
-
+       const firstData = data.find(row => row["Periode"] && row["Periode"] !== "");
+       const periode = firstData ? firstData["Periode"] : "";
 document.getElementById("chartOverlay").insertAdjacentHTML(
     "afterbegin",
     `<div id="totalBox" 
@@ -1391,6 +1391,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
