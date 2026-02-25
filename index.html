@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</head>
 <!-- SELECT2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
@@ -205,11 +204,67 @@ label{
     display:block;
 }
 /* RESPONSIVE */
+/* ============================= */
+/* MOBILE VERSION CLEAN */
+/* ============================= */
 @media(max-width:768px){
+
+    /* Sidebar jadi full screen */
     #sidebar{
-        width:70px;
-        } 
-}  
+        width:100%;
+        height:100vh;
+        left:-100%;
+        top:0;
+        border-radius:0;
+        backdrop-filter:none;
+        background:white;
+        z-index:3000;
+    }
+
+    #sidebar.active{
+        left:0;
+    }
+
+    /* Tombol toggle selalu di kiri atas */
+    #toggleSidebar{
+        left:15px !important;
+        top:15px;
+        width:40px;
+        height:40px;
+        font-size:20px;
+    }
+
+    /* Chart full screen */
+    #chartOverlay{
+        width:100%;
+        height:100%;
+        top:0;
+        left:0;
+        transform:none;
+        border-radius:0;
+        padding:15px;
+    }
+
+    #chartOverlay button{
+        top:15px;
+        right:15px;
+    }
+
+    canvas{
+        height:80% !important;
+    }
+
+    /* Font lebih readable */
+    .menu-parent{
+        font-size:16px;
+    }
+
+    .menu-child div{
+        font-size:15px;
+        padding:10px;
+    }
+
+}
 </style>
 </head>
 <body>
@@ -237,11 +292,11 @@ label{
             📊 Monitoring ▼
         </div>
         <div class="menu-child">
-            <div onclick="loadKawasan()">Luas Kawasan Hutan</div>
-            <div onclick="loadPenanaman()">Penanaman PBPH</div>
-            <div onclick="loadProduksi()">Produksi PBPH</div>
-            <div onclick="loadProduksi()">Produksi Industri 6000 UP</div>
-        </div>
+    <div onclick="loadKawasan(); closeSidebarMobile()">Luas Kawasan Hutan</div>
+    <div onclick="loadPenanaman(); closeSidebarMobile()">Penanaman PBPH</div>
+    <div onclick="loadProduksi(); closeSidebarMobile()">Produksi PBPH</div>
+    <div onclick="loadProduksi(); closeSidebarMobile()">Produksi Industri 6000 UP</div>
+</div>
     </div>
 
     <!-- FILTER -->
@@ -276,8 +331,6 @@ label{
 
 <!-- SELECT2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 // =======================
@@ -1102,6 +1155,117 @@ function loadKawasan(){
     });
 }
 // =======================
+// LOAD PRODUKSI KAYU BULAT
+// =======================
+    function loadProduksi(){
+
+    document.getElementById("chartOverlay").style.display = "block";
+
+    let oldTotal = document.getElementById("totalBox");
+    if(oldTotal) oldTotal.remove();
+
+    if(chartInstance){
+        chartInstance.destroy();
+    }
+
+    const spreadsheetID = "1j1cpMuO0i8Nh7cId1loAKYOHn6J9RSNT3zmT3t4VU";
+    const sheetName = "Produksi Kayu Bulat";
+
+    fetch(`https://opensheet.elk.sh/${spreadsheetID}/${sheetName}`)
+    .then(res => res.json())
+    .then(data => {
+
+        if(!Array.isArray(data) || data.length === 0){
+            alert("Data Produksi tidak terbaca.");
+            return;
+        }
+
+        const periode = data[0]["Periode"] || "2025";
+
+        document.getElementById("chartOverlay").insertAdjacentHTML(
+            "afterbegin",
+            `<div id="totalBox" 
+                style="background:linear-gradient(90deg,#2e7d32,#1b5e20);
+                       color:white;
+                       padding:10px;
+                       border-radius:8px;
+                       margin-bottom:10px;
+                       font-weight:bold;
+                       font-size:15px;
+                       text-align:center">
+                📦 PRODUKSI PBPH - ${periode}
+            </div>`
+        );
+
+        const labels = data.map(r => r["Nama PBPH"]);
+
+        // Ambil volume berdasarkan urutan kolom
+        const rencana = data.map(r => {
+            let value = Object.values(r)[3]; // kolom Rencana Volume
+            return parseFloat(
+                value?.toString().replace(/\./g,'').replace(',', '.') || 0
+            );
+        });
+
+        const realisasi = data.map(r => {
+            let value = Object.values(r)[5]; // kolom Realisasi Volume
+            return parseFloat(
+                value?.toString().replace(/\./g,'').replace(',', '.') || 0
+            );
+        });
+
+        let totalRencana = rencana.reduce((a,b)=>a+b,0);
+        let totalRealisasi = realisasi.reduce((a,b)=>a+b,0);
+
+        labels.push("TOTAL");
+        rencana.push(totalRencana);
+        realisasi.push(totalRealisasi);
+
+        chartInstance = new Chart(
+            document.getElementById("chartKawasan"),
+            {
+                type:'bar',
+                data:{
+                    labels: labels,
+                    datasets:[
+                        {
+                            label:'Rencana Volume (m³)',
+                            data:rencana
+                        },
+                        {
+                            label:'Realisasi Volume (m³)',
+                            data:realisasi
+                        }
+                    ]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        legend:{ position:'top' }
+                    },
+                    scales:{
+                        x:{
+                            ticks:{
+                                maxRotation:45,
+                                minRotation:45,
+                                autoSkip:false
+                            }
+                        },
+                        y:{
+                            beginAtZero:true
+                        }
+                    }
+                }
+            }
+        );
+
+    })
+    .catch(err=>{
+        console.log("Gagal ambil data Produksi:", err);
+    });
+}
+// =======================
 // TOGGLE MENU SIDEBAR
 // =======================
 
@@ -1156,7 +1320,13 @@ function loadSheetData(sheetName){
 // =======================
 
 document.getElementById("toggleSidebar").onclick = function(){
-    document.getElementById("sidebar").classList.toggle("collapsed");
+
+    if(window.innerWidth <= 768){
+        document.getElementById("sidebar").classList.toggle("active");
+    } else {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+    }
+
 };
     console.log("Load Kawasan Clicked");
   // =======================
@@ -1217,10 +1387,15 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
 });
+// =======================
+// CLOSE SIDEBAR MOBILE
+// =======================
+function closeSidebarMobile(){
+    if(window.innerWidth <= 768){
+        document.getElementById("sidebar").classList.remove("active");
+    }
+}
 </script>
 </body>
 </html>
-
-
-
 
