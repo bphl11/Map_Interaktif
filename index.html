@@ -991,12 +991,16 @@ function loadPenanaman(){
             return;
         }
 
-        // ======================
-        // AMBIL TAHUN OTOMATIS
-        // ======================
-        const tahun = data[0]["Tahun"] || "Tidak diketahui";
+// ======================
+// AMBIL PERIODE OTOMATIS
+// ======================
+const firstData = data.find(row => row["Periode"] && row["Periode"] !== "");
+const periode = firstData ? firstData["Periode"] : "";
 
-        document.getElementById("chartOverlay").insertAdjacentHTML(
+// Filter baris kosong supaya grafik bersih
+data = data.filter(row => row["Nama PBPH"] && row["Nama PBPH"] !== "");
+
+document.getElementById("chartOverlay").insertAdjacentHTML(
     "afterbegin",
     `<div id="totalBox" 
         style="background:linear-gradient(90deg,#1565c0,#0d47a1);
@@ -1391,6 +1395,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
