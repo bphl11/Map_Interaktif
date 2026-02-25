@@ -1541,7 +1541,7 @@ function closeSidebarMobile(){
         document.getElementById("sidebar").classList.remove("active");
     }
 }
-    // =======================
+// =======================
 // ROUTING MODE PROFESIONAL
 // =======================
 
@@ -1557,7 +1557,7 @@ routingButton.onAdd = function(map){
 
     var btn = L.DomUtil.create('button','routing-btn');
 
-    routingBtnElement = btn; // SIMPAN REFERENCE TOMBOL
+    routingBtnElement = btn;
 
     btn.innerHTML = "🧭";
     btn.title = "Aktifkan Routing";
@@ -1610,21 +1610,24 @@ map.on('click', function(e){
 
         routingControl.on('routesfound', function(e){
 
-    var route = e.routes[0];
-    var distance = (route.summary.totalDistance / 1000).toFixed(2);
+            var route = e.routes[0];
+            var distance = (route.summary.totalDistance / 1000).toFixed(2);
+            var lastCoord = route.coordinates[route.coordinates.length - 1];
 
-    // Ambil koordinat akhir dari route
-    var lastCoord = route.coordinates[route.coordinates.length - 1];
+            L.popup()
+                .setLatLng([lastCoord.lat, lastCoord.lng])
+                .setContent("📏 Jarak: <b>" + distance + " km</b>")
+                .openOn(map);
+        });
 
-    L.popup()
-        .setLatLng([lastCoord.lat, lastCoord.lng])
-        .setContent("📏 Jarak: <b>" + distance + " km</b>")
-        .openOn(map);
+        routingPoints = []; // reset agar bisa klik lagi
+    }
 });
 
 // =======================
 // RESET ROUTING FUNCTION
 // =======================
+
 function resetRouting(){
 
     if(routingControl){
@@ -1644,6 +1647,7 @@ function resetRouting(){
 </script>
 </body>
 </html>
+
 
 
 
