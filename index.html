@@ -997,19 +997,19 @@ function loadPenanaman(){
         const tahun = data[0]["Tahun"] || "Tidak diketahui";
 
         document.getElementById("chartOverlay").insertAdjacentHTML(
-            "afterbegin",
-            `<div id="totalBox" 
-                style="background:linear-gradient(90deg,#1565c0,#0d47a1);
-                       color:white;
-                       padding:10px;
-                       border-radius:8px;
-                       margin-bottom:10px;
-                       font-weight:bold;
-                       font-size:15px;
-                       text-align:center">
-                📊 PERIODE TAHUN ${tahun}
-            </div>`
-        );
+    "afterbegin",
+    `<div id="totalBox" 
+        style="background:linear-gradient(90deg,#1565c0,#0d47a1);
+               color:white;
+               padding:10px;
+               border-radius:8px;
+               margin-bottom:10px;
+               font-weight:bold;
+               font-size:15px;
+               text-align:center">
+        🌱 PENANAMAN PBPH PERIODE ${periode}
+    </div>`
+);
 
         const labels = data.map(r => r["Nama PBPH"]);
         const rencana = data.map(r => parseAngka(r["Rencana"]));
@@ -1391,6 +1391,7 @@ function closeSidebarMobile(){
 </script>
 </body>
 </html>
+
 
 
 
