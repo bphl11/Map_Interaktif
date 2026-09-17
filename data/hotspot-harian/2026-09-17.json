@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.1499,
+          -3.32498
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-09-16T17:43:00.000000Z",
+        "date_hotspot_ori": "2026-09-16T17:43:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.32498,
+        "long": 115.1499,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Kamis, 17 September 2026 00:43:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Maniapun",
+        "kecamatan": "Pengarom",
+        "kabkota": "Banjar",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}
