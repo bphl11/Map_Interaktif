@@ -61,6 +61,56 @@
     chartInstances = [];
   }
 
+  // Plugin label nilai puncak pada grafik PBPH.
+  // Angka ditampilkan langsung pada puncak tanpa hover.
+  const pbphPeakLabelsPlugin = {
+    id: 'pbphPeakLabels',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      chart.data.datasets.forEach((dataset, datasetIndex) => {
+        const meta = chart.getDatasetMeta(datasetIndex);
+        if (!meta || meta.hidden) return;
+
+        const values = dataset.data || [];
+        const points = meta.data || [];
+
+        points.forEach((point, index) => {
+          const value = Number(values[index] || 0);
+          if (!Number.isFinite(value) || value <= 0) return;
+
+          const previous = index > 0 ? Number(values[index - 1] || 0) : -Infinity;
+          const next = index < values.length - 1 ? Number(values[index + 1] || 0) : -Infinity;
+
+          const isPeak =
+            (value >= previous && value >= next) &&
+            (value > previous || value > next);
+
+          const isEndpoint = index === 0 || index === values.length - 1;
+          if (!isPeak && !isEndpoint) return;
+
+          const text = value.toLocaleString('id-ID');
+          ctx.save();
+          ctx.font = '700 11px Arial, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+
+          const metrics = ctx.measureText(text);
+          const padX = 4;
+          const boxWidth = metrics.width + padX * 2;
+          const boxHeight = 16;
+          const x = point.x;
+          const y = point.y;
+
+          ctx.fillStyle = 'rgba(255,255,255,.92)';
+          ctx.fillRect(x - boxWidth / 2, y - boxHeight - 4, boxWidth, boxHeight);
+          ctx.fillStyle = dataset.borderColor || '#2e7d32';
+          ctx.fillText(text, x, y - 7);
+          ctx.restore();
+        });
+      });
+    }
+  };
+
   function render(data) {
     injectStyle();
     const container = document.getElementById('trenPbphCharts');
@@ -134,6 +184,7 @@
             fill:true
           }]
         },
+        plugins:[pbphPeakLabelsPlugin],
         options:{
           responsive:true,
           maintainAspectRatio:false,
