@@ -45,6 +45,10 @@
   }
 
   function getFilteredData() {
+    if (typeof window.getHotspotTrendViewData === 'function') {
+      return window.getHotspotTrendViewData().data || [];
+    }
+
     const start = document.getElementById('tanggalMulaiTren')?.value || '';
     const end = document.getElementById('tanggalSelesaiTren')?.value || '';
     return allData.filter(item => (!start || item.tanggal >= start) && (!end || item.tanggal <= end));
@@ -85,7 +89,13 @@
 
     const labels = data.map(item => {
       const d = new Date(item.tanggal + 'T00:00:00');
-      return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
+      const isMonthly = item.tanggal.length === 10 && item.tanggal.endsWith('-01') &&
+        data.length > 31;
+      return d.toLocaleDateString('id-ID',
+        isMonthly
+          ? { month:'short', year:'numeric' }
+          : { day:'2-digit', month:'short', year:'numeric' }
+      );
     });
 
     names.forEach((name, index) => {
