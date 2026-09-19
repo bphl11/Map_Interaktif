@@ -1,12 +1,12 @@
 // =====================================================
-// TREN HOTSPOT 30 HARI - PER PBPH
-// Sumber: data/hotspot-harian/hotspot-tren-30-hari.json
+// TREN HOTSPOT HISTORIS - PER PBPH
+// Sumber: data/hotspot-harian/rekap-hotspot-harian.json
 // Menggunakan rekap_pbph yang sudah tersimpan oleh aplikasi.
 // =====================================================
 (function () {
   'use strict';
 
-  const DATA_URL = 'data/hotspot-harian/hotspot-tren-30-hari.json';
+  const DATA_URL = 'data/hotspot-harian/rekap-hotspot-harian.json';
   let allData = [];
   let chartInstances = [];
   let initializedPanel = null;
