@@ -1,119 +1,97 @@
 name: Update Hotspot Harian
 
 on:
+  push:
+    branches:
+      - main
 
-  # Jalankan otomatis setiap hari
-  # 00:30 UTC = 08:30 WITA
   schedule:
-    - cron: "30 0 * * *"
+    - cron: "30 10 * * *"
 
-  # Bisa dijalankan manual dari GitHub
   workflow_dispatch:
-
+    inputs:
+      mode:
+        description: "Mode update"
+        required: false
+        default: "rolling"
+        type: choice
+        options:
+          - rolling
+          - backfill
+      start_date:
+        description: "Tanggal mulai YYYY-MM-DD (backfill)"
+        required: false
+        default: "2026-01-01"
+      end_date:
+        description: "Tanggal akhir YYYY-MM-DD (kosong = kemarin)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
 
-
 jobs:
-
   update-hotspot:
-
+    if: >
+      github.event_name != 'push' ||
+      contains(github.event.head_commit.message, '[backfill-hotspot]')
     runs-on: ubuntu-latest
 
-
     steps:
-
-      # ================================================
-      # AMBIL SOURCE CODE REPOSITORY
-      # ================================================
-
       - name: Checkout repository
-
         uses: actions/checkout@v4
-
         with:
-
           fetch-depth: 0
 
-
-      # ================================================
-      # INSTALL NODE.JS
-      # ================================================
-
       - name: Setup Node.js
-
         uses: actions/setup-node@v4
-
         with:
-
           node-version: "20"
 
-
-      # ================================================
-      # CEK VERSI NODE
-      # ================================================
-
-      - name: Cek Node.js
-
-        run: node --version
-
-      # ================================================
-      # INSTALL DEPENDENCIES
-      # ================================================
-
       - name: Install dependencies
-
         run: npm install
 
-      # ================================================
-      # JALANKAN UPDATE HOTSPOT
-      # ================================================
-
-      - name: Update data hotspot
-
-        run: node scripts/update-hotspot.js
-
-
-      # ================================================
-      # CEK HASIL DATA
-      # ================================================
-
-      - name: Cek hasil update
-
+      - name: Backfill histori Januari 2026 sampai H-1
+        if: >
+          (github.event_name == 'push' &&
+           contains(github.event.head_commit.message, '[backfill-hotspot]')) ||
+          (github.event_name == 'workflow_dispatch' &&
+           inputs.mode == 'backfill')
+        env:
+          START_DATE: ${{ inputs.start_date || '2026-01-01' }}
+          END_DATE: ${{ inputs.end_date }}
         run: |
+          if [ -z "$END_DATE" ]; then
+            END_DATE=$(TZ=Asia/Makassar date -d "yesterday" +%F)
+          fi
+          START_DATE="$START_DATE" END_DATE="$END_DATE" node scripts/backfill-hotspot.js
 
-          echo "Isi folder data:"
-          ls -lah data/
+      - name: Refresh 7 hari terakhir
+        if: >
+          github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_dispatch' &&
+           inputs.mode == 'rolling')
+        run: |
+          END_DATE=$(TZ=Asia/Makassar date -d "yesterday" +%F)
+          START_DATE=$(TZ=Asia/Makassar date -d "7 days ago" +%F)
+          START_DATE="$START_DATE" END_DATE="$END_DATE" node scripts/backfill-hotspot.js
 
+      - name: Cek hasil data
+        run: |
           echo "Isi folder hotspot harian:"
-          ls -lah data/hotspot-harian/ || true
-
-      # ================================================
-      # SIMPAN PERUBAHAN KE GITHUB
-      # ================================================
+          ls -lah data/hotspot-harian/ | head -100
 
       - name: Commit dan push data
-
         run: |
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add data/
 
           if git diff --cached --quiet; then
-
             echo "Tidak ada perubahan data."
-
           else
-
             git commit -m "Update data hotspot harian"
-
-            # Ambil perubahan terbaru dari GitHub
             git pull --rebase origin main
-
-            # Push kembali ke repository
             git push origin main
-
           fi
