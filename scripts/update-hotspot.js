@@ -11,7 +11,7 @@ const turf = require("@turf/turf");
 // =====================================================
 // TANGGAL HARI INI
 // MENGGUNAKAN ZONA WAKTU INDONESIA
-// ASIA/JAKARTA
+// ASIA/MAKASSAR
 // =====================================================
 
 const sekarang = new Date();
@@ -21,7 +21,7 @@ const formatterTanggal =
         "en-CA",
         {
             timeZone:
-                "Asia/Jakarta",
+                "Asia/Makassar",
 
             year:
                 "numeric",
