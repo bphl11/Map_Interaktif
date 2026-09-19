@@ -3224,7 +3224,11 @@ const trendPeakLabelsPlugin = {
                     (value >= previous && value >= next) &&
                     (value > previous || value > next);
 
-                if (!isPeak) return;
+                const isEndpoint =
+                    index === 0 ||
+                    index === values.length - 1;
+
+                if (!isPeak && !isEndpoint) return;
 
                 const x = point.x;
                 const y = point.y;
@@ -3339,10 +3343,10 @@ function renderTrendCharts() {
                     fill: true
                 }]
             },
+            plugins: [trendPeakLabelsPlugin],
             options: {
                 ...commonOptions,
                 plugins: {
-                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: { display: true, text: "Tren Total Hotspot" }
                 },
@@ -3377,10 +3381,10 @@ function renderTrendCharts() {
                     fill: true
                 }]
             },
+            plugins: [trendPeakLabelsPlugin],
             options: {
                 ...commonOptions,
                 plugins: {
-                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: { display: true, text: "Tren Hotspot Dalam Kawasan" }
                 },
@@ -3428,10 +3432,10 @@ function renderTrendCharts() {
                     }
                 ]
             },
+            plugins: [trendPeakLabelsPlugin],
             options: {
                 ...commonOptions,
                 plugins: {
-                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: {
                         display: true,
