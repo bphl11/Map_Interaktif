@@ -3184,6 +3184,96 @@ function updateTrendSummary(view) {
     }
 }
 
+// =====================================================
+// LABEL ANGKA PADA PUNCAK GRAFIK TREN
+// Menampilkan nilai pada titik yang merupakan puncak lokal,
+// sehingga angka dapat dibaca tanpa mengarahkan kursor.
+// =====================================================
+
+const trendPeakLabelsPlugin = {
+    id: "trendPeakLabels",
+
+    afterDatasetsDraw(chart) {
+        const ctx = chart.ctx;
+
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+
+            if (!meta || meta.hidden) return;
+
+            const values = dataset.data || [];
+            const points = meta.data || [];
+
+            points.forEach((point, index) => {
+                const value = Number(values[index] || 0);
+
+                if (!Number.isFinite(value) || value <= 0) return;
+
+                const previous = index > 0
+                    ? Number(values[index - 1] || 0)
+                    : -Infinity;
+
+                const next = index < values.length - 1
+                    ? Number(values[index + 1] || 0)
+                    : -Infinity;
+
+                // Hanya tampilkan angka pada puncak lokal.
+                // Untuk titik ujung, tampilkan jika nilainya lebih
+                // besar dari titik tetangganya.
+                const isPeak =
+                    (value >= previous && value >= next) &&
+                    (value > previous || value > next);
+
+                if (!isPeak) return;
+
+                const x = point.x;
+                const y = point.y;
+
+                ctx.save();
+
+                ctx.font = "700 12px Arial, sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "bottom";
+
+                const text = value.toLocaleString("id-ID");
+
+                // Dataset kedua digeser sedikit agar label dua garis
+                // yang bertemu pada tanggal yang sama tidak bertumpuk.
+                const offsetX = datasetIndex * 10 - 5;
+                const offsetY = datasetIndex * 2;
+
+                // Latar putih transparan supaya angka tetap terbaca
+                // ketika berada di atas area grafik.
+                const metrics = ctx.measureText(text);
+                const paddingX = 4;
+                const paddingY = 3;
+                const boxWidth = metrics.width + paddingX * 2;
+                const boxHeight = 16;
+
+                ctx.fillStyle = "rgba(255,255,255,.88)";
+                ctx.fillRect(
+                    x + offsetX - boxWidth / 2,
+                    y - boxHeight - 3 - offsetY,
+                    boxWidth,
+                    boxHeight
+                );
+
+                ctx.fillStyle =
+                    dataset.borderColor ||
+                    "#333";
+
+                ctx.fillText(
+                    text,
+                    x + offsetX,
+                    y - 6 - offsetY
+                );
+
+                ctx.restore();
+            });
+        });
+    }
+};
+
 function renderTrendCharts() {
     const raw = getFilteredTrendData();
     const info = document.getElementById("info-tren-hotspot");
@@ -3252,6 +3342,7 @@ function renderTrendCharts() {
             options: {
                 ...commonOptions,
                 plugins: {
+                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: { display: true, text: "Tren Total Hotspot" }
                 },
@@ -3289,6 +3380,7 @@ function renderTrendCharts() {
             options: {
                 ...commonOptions,
                 plugins: {
+                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: { display: true, text: "Tren Hotspot Dalam Kawasan" }
                 },
@@ -3339,6 +3431,7 @@ function renderTrendCharts() {
             options: {
                 ...commonOptions,
                 plugins: {
+                    trendPeakLabels: true,
                     legend: { position: "top" },
                     title: {
                         display: true,
