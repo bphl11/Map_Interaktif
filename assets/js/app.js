@@ -3039,17 +3039,61 @@ function getTrendMonthLabel(tanggal) {
     return d.toLocaleDateString("id-ID", { month: "short", year: "numeric" });
 }
 
+function getTodayMakassar() {
+    return new Date().toLocaleDateString("en-CA", {
+        timeZone: "Asia/Makassar"
+    });
+}
+
+function getYesterdayMakassar() {
+    const today = new Date(getTodayMakassar() + "T00:00:00");
+    today.setDate(today.getDate() - 1);
+    return today.toISOString().slice(0, 10);
+}
+
 function getLast30DaysRange(data) {
     if (!data.length) return { start: "", end: "" };
-    const end = data[data.length - 1].tanggal;
-    const endDate = new Date(end + "T00:00:00");
+
+    // Hari berjalan sengaja tidak dimasukkan ke default trend karena
+    // data SiPongi hari ini masih dapat berubah.
+    const end = getYesterdayMakassar();
+    const available = data.filter(item => item.tanggal <= end);
+    if (!available.length) return { start: "", end: "" };
+
+    const actualEnd = available[available.length - 1].tanggal;
+    const endDate = new Date(actualEnd + "T00:00:00");
     endDate.setDate(endDate.getDate() - 29);
     const start = endDate.toISOString().slice(0, 10);
-    const first = data.find(item => item.tanggal >= start);
+    const first = available.find(item => item.tanggal >= start);
+
     return {
-        start: first ? first.tanggal : data[0].tanggal,
-        end
+        start: first ? first.tanggal : available[0].tanggal,
+        end: actualEnd
     };
+}
+
+function getFilteredTrendData() {
+    const start = document.getElementById("tanggalMulaiTren")?.value || "";
+    const end = document.getElementById("tanggalSelesaiTren")?.value || "";
+
+    const filtered = dataTrenHotspot.filter(item =>
+        (!start || item.tanggal >= start) &&
+        (!end || item.tanggal <= end)
+    );
+
+    // Jika tanggal hari ini dipilih, gunakan snapshot realtime yang sama
+    // dengan panel REKAP HOTSPOT, bukan snapshot historis yang mungkin berubah.
+    const today = getTodayMakassar();
+    const realtime = window.rekapHotspotHariIni;
+
+    if (end >= today && realtime && realtime.tanggal === today) {
+        return filtered
+            .filter(item => item.tanggal !== today)
+            .concat([realtime])
+            .sort((a, b) => String(a.tanggal).localeCompare(String(b.tanggal)));
+    }
+
+    return filtered;
 }
 
 function aggregateTrendData(data) {
@@ -3110,15 +3154,7 @@ function aggregateTrendData(data) {
     };
 }
 
-function getFilteredTrendData() {
-    const start = document.getElementById("tanggalMulaiTren")?.value || "";
-    const end = document.getElementById("tanggalSelesaiTren")?.value || "";
 
-    return dataTrenHotspot.filter(item =>
-        (!start || item.tanggal >= start) &&
-        (!end || item.tanggal <= end)
-    );
-}
 
 window.getHotspotTrendViewData = function () {
     const filtered = getFilteredTrendData();
