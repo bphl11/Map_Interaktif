@@ -78,7 +78,7 @@ const folderData =
 const fileTren =
     path.join(
         folderData,
-        "hotspot-tren-30-hari.json"
+        "rekap-hotspot-harian.json"
     );
 
 
@@ -862,9 +862,20 @@ const rekapPBPH = {};
                 }
 
 
-                else {
+                else if (confidence === "low") {
 
                     low++;
+
+                }
+
+                else {
+
+                    console.warn(
+                        "Confidence tidak dikenali:",
+                        p.confidence_level
+                    );
+
+                    return;
 
                 }
 
@@ -1117,14 +1128,23 @@ const totalKategori =
     totalKawasan +
     totalLuarKawasan;
 
+const validasiKawasan =
+    totalKategori === totalHotspot;
 
-if (
-    totalKategori !==
-    totalHotspot
-) {
+if (!validasiKawasan) {
 
-    console.warn(
-        "PERINGATAN: Total Kawasan + Di Luar Kawasan tidak sama dengan total hotspot."
+    console.error(
+        "VALIDASI GAGAL: Kawasan + Di Luar Kawasan != Total Hotspot",
+        {
+            totalHotspot,
+            totalKawasan,
+            totalLuarKawasan,
+            totalKategori
+        }
+    );
+
+    throw new Error(
+        "Validasi rekap hotspot gagal: total kawasan + di luar kawasan tidak sama dengan total hotspot."
     );
 
 }
