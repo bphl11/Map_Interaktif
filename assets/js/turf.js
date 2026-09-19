@@ -718,6 +718,10 @@ function tampilkanRekapHotspot(
 
     var totalHotspot = 0;
 
+    // Snapshot rekap realtime untuk dipakai oleh Tren Historis
+    // ketika pengguna sengaja memilih tanggal hari ini.
+    window.rekapHotspotHariIni = null;
+
 
     hasilRekap.forEach(
         function(item) {
@@ -732,6 +736,47 @@ function tampilkanRekapHotspot(
 
         }
     );
+
+
+    // Simpan snapshot realtime agar grafik tren untuk hari ini
+    // menggunakan angka yang sama dengan panel REKAP HOTSPOT.
+    var snapshotKawasan = {};
+    var snapshotPBPH = {};
+
+    hasilRekap.forEach(function(item) {
+        var lokasi = String(item.lokasi || "");
+        if (lokasi === "DI LUAR KAWASAN HUTAN") {
+            snapshotKawasan["Di Luar Kawasan"] = item.total;
+        } else if (lokasi.indexOf("KAWASAN HUTAN (") === 0) {
+            var kategori = lokasi.replace(/^KAWASAN HUTAN \\((.*)\\)$/, "$1");
+            snapshotKawasan[kategori] = (snapshotKawasan[kategori] || 0) + item.total;
+        } else {
+            var match = lokasi.match(/^(.*) \\(([^()]*)\\)$/);
+            if (match) {
+                var namaPBPH = match[1];
+                var kategoriPBPH = match[2];
+                snapshotPBPH[namaPBPH] = (snapshotPBPH[namaPBPH] || 0) + item.total;
+                snapshotKawasan[kategoriPBPH] = (snapshotKawasan[kategoriPBPH] || 0) + item.total;
+            }
+        }
+    });
+
+    var snapshotKawasanTotal = totalHotspot - (snapshotKawasan["Di Luar Kawasan"] || 0);
+    var snapshotLuarTotal = snapshotKawasan["Di Luar Kawasan"] || 0;
+
+    window.rekapHotspotHariIni = {
+        tanggal: typeof hariIni !== "undefined" ? hariIni : new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Makassar" }),
+        high: totalHigh,
+        medium: totalMedium,
+        low: totalLow,
+        total: totalHotspot,
+        kawasan: snapshotKawasanTotal,
+        luar_kawasan: snapshotLuarTotal,
+        pbph: Object.values(snapshotPBPH).reduce(function(sum, value) { return sum + value; }, 0),
+        rekap_kawasan: snapshotKawasan,
+        rekap_pbph: snapshotPBPH,
+        realtime: true
+    };
 
 
     // =================================================
