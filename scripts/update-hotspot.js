@@ -35,11 +35,25 @@ const formatterTanggal =
     );
 
 
-const hariIni =
+const tanggalDefault =
     formatterTanggal.format(
         sekarang
     );
 
+// Untuk histori, tanggal dapat dipaksa dari environment HOTSPOT_DATE.
+// Jika tidak diberikan, gunakan tanggal lokal Asia/Makassar saat ini.
+const hariIni =
+    process.env.HOTSPOT_DATE ||
+    tanggalDefault;
+
+if (!/^\d{4}-\d{2}-\d{2}$/.test(hariIni)) {
+    throw new Error(
+        "HOTSPOT_DATE harus berformat YYYY-MM-DD."
+    );
+}
+
+
+console.log("Tanggal data yang diambil:", hariIni);
 
 // =====================================================
 // URL API SIPONGI
