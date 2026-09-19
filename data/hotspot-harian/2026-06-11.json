@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.12317,
+          -3.08473
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-06-10T18:00:00.000000Z",
+        "date_hotspot_ori": "2026-06-10T18:00:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.08473,
+        "long": 115.12317,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Kamis, 11 Juni 2026 01:00:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Tatakan",
+        "kecamatan": "Tapin Selatan",
+        "kabkota": "Tapin",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.49551,
+          -2.21291
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-06-10T18:00:00.000000Z",
+        "date_hotspot_ori": "2026-06-10T18:00:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.21291,
+        "long": 115.49551,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Kamis, 11 Juni 2026 01:00:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Lok Batung",
+        "kecamatan": "Paringin",
+        "kabkota": "Balangan",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.37503,
+          -3.4533
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-06-10T18:00:00.000000Z",
+        "date_hotspot_ori": "2026-06-10T18:00:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.4533,
+        "long": 116.37503,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Kamis, 11 Juni 2026 01:00:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Serakaman",
+        "kecamatan": "Pulau Sebuku",
+        "kabkota": "Kotabaru",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}

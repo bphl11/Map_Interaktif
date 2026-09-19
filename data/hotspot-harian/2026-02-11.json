@@ -1,0 +1,98 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.4323,
+          -3.7618
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-02-11T06:05:00.000000Z",
+        "date_hotspot_ori": "2026-02-11T06:05:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.7618,
+        "long": 115.4323,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 Februari 2026 13:05:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Satui Barat",
+        "kecamatan": "Satui",
+        "kabkota": "Tanah Bumbu",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.43452,
+          -3.76224
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-02-11T05:46:00.000000Z",
+        "date_hotspot_ori": "2026-02-11T05:46:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.76224,
+        "long": 115.43452,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 Februari 2026 12:46:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Satui Barat",
+        "kecamatan": "Satui",
+        "kabkota": "Tanah Bumbu",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.43092,
+          -3.76278
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-02-11T05:46:00.000000Z",
+        "date_hotspot_ori": "2026-02-11T05:46:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.76278,
+        "long": 115.43092,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 Februari 2026 12:46:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Satui Barat",
+        "kecamatan": "Satui",
+        "kabkota": "Tanah Bumbu",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}

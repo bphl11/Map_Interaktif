@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.23622,
+          -2.94162
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-05-18T13:21:00.000000Z",
+        "date_hotspot_ori": "2026-05-18T13:21:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.94162,
+        "long": 115.23622,
+        "sumber": "NASA-MODIS",
+        "ori_sumber": null,
+        "date_hotspot": "Senin, 18 Mei 2026 20:21:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 78,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Binderang",
+        "kecamatan": "Lokpaikat",
+        "kabkota": "Tapin",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}

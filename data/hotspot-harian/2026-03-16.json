@@ -1,0 +1,36 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.61288,
+          -3.62597
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-03-15T17:09:00.000000Z",
+        "date_hotspot_ori": "2026-03-15T17:09:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.62597,
+        "long": 115.61288,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Senin, 16 Maret 2026 00:09:00",
+        "desa_id": null,
+        "counter": 3,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Bayan Sari",
+        "kecamatan": "Angsana",
+        "kabkota": "Tanah Bumbu",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}

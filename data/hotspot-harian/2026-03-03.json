@@ -1,0 +1,67 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.5695,
+          -2.06018
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-03-02T17:51:00.000000Z",
+        "date_hotspot_ori": "2026-03-02T17:51:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.06018,
+        "long": 115.5695,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Selasa, 03 Maret 2026 00:51:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Seradang",
+        "kecamatan": "Haruai",
+        "kabkota": "Tabalong",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          116.14355,
+          -3.86303
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-03-03T06:09:00.000000Z",
+        "date_hotspot_ori": "2026-03-03T06:09:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.86303,
+        "long": 116.14355,
+        "sumber": "NASA-SNPP",
+        "ori_sumber": null,
+        "date_hotspot": "Selasa, 03 Maret 2026 13:09:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Terangkeh",
+        "kecamatan": "Pulau Laut Barat",
+        "kabkota": "Kotabaru",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    }
+  ]
+}
