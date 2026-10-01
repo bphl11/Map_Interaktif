@@ -6109,9 +6109,9 @@
     },
     "rekap_pbph": {
       "PT. Inhutani I Unit Pulau Laut (Semaras)": 30,
-      "PT. Inni Joa": 4,
       "PT. Hutan Rindang Banua": 33,
       "PT. Kodeco Timber": 6,
+      "PT. Inni Joa": 4,
       "PT. Inhutani I Unit Senakin": 1,
       "PT. Aya Yayang Indonesia": 1,
       "PT. Inhutani I Unit Riam Kiwa": 3,
@@ -6119,6 +6119,35 @@
       "PT. Batulicin Bumi Bersujud": 2,
       "PT. Borneo IndoTani": 1,
       "PT. Inhutani I Unit Pelaihari": 1
+    }
+  },
+  {
+    "tanggal": "2026-10-01",
+    "high": 63,
+    "medium": 528,
+    "low": 12,
+    "total": 603,
+    "pbph": 114,
+    "kawasan": 242,
+    "luar_kawasan": 361,
+    "rekap_kawasan": {
+      "HL": 49,
+      "HP": 130,
+      "HPT": 14,
+      "HPK": 35,
+      "HK": 14,
+      "Di Luar Kawasan": 361
+    },
+    "rekap_pbph": {
+      "PT. Hutan Rindang Banua": 48,
+      "PT. Kodeco Timber": 16,
+      "PT. Inhutani I Unit Riam Kiwa": 11,
+      "PT. Inni Joa": 7,
+      "PT. Dwima Intiga": 8,
+      "PT. Inhutani I Unit Pulau Laut (Semaras)": 15,
+      "PT. Inhutani I Unit Pelaihari": 5,
+      "PT. Aya Yayang Indonesia": 2,
+      "PT. Borneo IndoTani": 2
     }
   }
 ]
