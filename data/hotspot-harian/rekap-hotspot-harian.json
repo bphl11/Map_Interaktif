@@ -6310,33 +6310,63 @@
   },
   {
     "tanggal": "2026-10-07",
-    "high": 31,
-    "medium": 568,
-    "low": 7,
-    "total": 606,
-    "pbph": 84,
-    "kawasan": 267,
-    "luar_kawasan": 339,
+    "high": 36,
+    "medium": 575,
+    "low": 9,
+    "total": 620,
+    "pbph": 85,
+    "kawasan": 274,
+    "luar_kawasan": 346,
     "rekap_kawasan": {
-      "HL": 30,
-      "HP": 97,
+      "HL": 31,
+      "HP": 98,
       "HPT": 29,
-      "HPK": 74,
+      "HPK": 79,
       "HK": 37,
-      "Di Luar Kawasan": 339
+      "Di Luar Kawasan": 346
     },
     "rekap_pbph": {
+      "PT. Kodeco Timber": 6,
       "PT. Hutan Rindang Banua": 37,
       "PT. Inhutani I Unit Pelaihari": 8,
       "PT. Inhutani I Unit Senakin": 3,
       "PT. Aya Yayang Indonesia": 4,
-      "PT. Kodeco Timber": 5,
       "PT. Dwima Intiga": 13,
       "PT. Borneo IndoTani": 7,
       "PT. Inni Joa": 3,
       "PT. Inhutani I Unit Pulau Laut (Semaras)": 2,
       "PT. Inhutani I Unit Pulau Laut": 1,
       "PT. Batulicin Bumi Bersujud": 1
+    }
+  },
+  {
+    "tanggal": "2026-10-08",
+    "high": 42,
+    "medium": 1418,
+    "low": 127,
+    "total": 1587,
+    "pbph": 240,
+    "kawasan": 704,
+    "luar_kawasan": 883,
+    "rekap_kawasan": {
+      "HL": 142,
+      "HP": 283,
+      "HPT": 50,
+      "HPK": 150,
+      "HK": 79,
+      "Di Luar Kawasan": 883
+    },
+    "rekap_pbph": {
+      "PT. Kodeco Timber": 36,
+      "PT. Borneo IndoTani": 8,
+      "PT. Hutan Rindang Banua": 120,
+      "PT. Inni Joa": 22,
+      "PT. Dwima Intiga": 20,
+      "PT. Inhutani I Unit Pelaihari": 9,
+      "PT. Inhutani I Unit Senakin": 15,
+      "PT. Aya Yayang Indonesia": 8,
+      "PT. Inhutani I Unit Pulau Laut (Semaras)": 1,
+      "PT. Inhutani I Unit Pulau Laut": 1
     }
   }
 ]
