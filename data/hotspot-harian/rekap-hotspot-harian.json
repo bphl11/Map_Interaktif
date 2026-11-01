@@ -7003,5 +7003,51 @@
       "PT. Prima Multibuana": 3,
       "PT. Inhutani I Unit Riam Kiwa": 1
     }
+  },
+  {
+    "tanggal": "2026-10-31",
+    "high": 1,
+    "medium": 98,
+    "low": 1,
+    "total": 100,
+    "pbph": 24,
+    "kawasan": 38,
+    "luar_kawasan": 62,
+    "rekap_kawasan": {
+      "HL": 1,
+      "HP": 31,
+      "HPT": 0,
+      "HPK": 5,
+      "HK": 1,
+      "Di Luar Kawasan": 62
+    },
+    "rekap_pbph": {
+      "PT. Inhutani I Unit Senakin": 2,
+      "PT. Dwima Intiga": 17,
+      "PT. Aya Yayang Indonesia": 4,
+      "PT. Inni Joa": 1
+    }
+  },
+  {
+    "tanggal": "2026-11-01",
+    "high": 0,
+    "medium": 43,
+    "low": 0,
+    "total": 43,
+    "pbph": 17,
+    "kawasan": 22,
+    "luar_kawasan": 21,
+    "rekap_kawasan": {
+      "HL": 0,
+      "HP": 19,
+      "HPT": 0,
+      "HPK": 2,
+      "HK": 1,
+      "Di Luar Kawasan": 21
+    },
+    "rekap_pbph": {
+      "PT. Dwima Intiga": 14,
+      "PT. Hutan Rindang Banua": 3
+    }
   }
 ]
