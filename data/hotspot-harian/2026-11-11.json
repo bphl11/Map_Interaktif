@@ -6,37 +6,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          114.95443,
-          -2.55104
-        ]
-      },
-      "properties": {
-        "hs_id": "2026-11-11T05:54:00.000000Z",
-        "date_hotspot_ori": "2026-11-11T05:54:00.000000Z",
-        "provinsi_id": 12,
-        "lat": -2.55104,
-        "long": 114.95443,
-        "sumber": "NASA-NOAA20",
-        "ori_sumber": null,
-        "date_hotspot": "Rabu, 11 November 2026 12:54:00",
-        "desa_id": null,
-        "counter": 1,
-        "confidence": 25,
-        "confidence_level": "low",
-        "kawasan": "",
-        "desa": "Pakan Dalam",
-        "kecamatan": "Daha Utara",
-        "kabkota": "Hulu Sungai Selatan",
-        "nama_provinsi": "Kalimantan Selatan",
-        "pulau": "",
-        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           114.99216,
           -2.49789
         ]
@@ -58,6 +27,37 @@
         "desa": "Sapala",
         "kecamatan": "Paminggir",
         "kabkota": "Hulu Sungai Utara",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          114.95443,
+          -2.55104
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-11-11T05:54:00.000000Z",
+        "date_hotspot_ori": "2026-11-11T05:54:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.55104,
+        "long": 114.95443,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 November 2026 12:54:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 25,
+        "confidence_level": "low",
+        "kawasan": "",
+        "desa": "Pakan Dalam",
+        "kecamatan": "Daha Utara",
+        "kabkota": "Hulu Sungai Selatan",
         "nama_provinsi": "Kalimantan Selatan",
         "pulau": "",
         "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
@@ -1463,6 +1463,99 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          115.25803,
+          -3.84171
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-11-11T05:54:00.000000Z",
+        "date_hotspot_ori": "2026-11-11T05:54:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -3.84171,
+        "long": 115.25803,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 November 2026 12:54:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Kintap Kecil",
+        "kecamatan": "Kintap",
+        "kabkota": "Tanah Laut",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.49911,
+          -2.20661
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-11-11T16:56:00.000000Z",
+        "date_hotspot_ori": "2026-11-11T16:56:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.20661,
+        "long": 115.49911,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 November 2026 23:56:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Maburai",
+        "kecamatan": "Murung Pudak",
+        "kabkota": "Tabalong",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          115.49798,
+          -2.20878
+        ]
+      },
+      "properties": {
+        "hs_id": "2026-11-11T16:56:00.000000Z",
+        "date_hotspot_ori": "2026-11-11T16:56:00.000000Z",
+        "provinsi_id": 12,
+        "lat": -2.20878,
+        "long": 115.49798,
+        "sumber": "NASA-NOAA20",
+        "ori_sumber": null,
+        "date_hotspot": "Rabu, 11 November 2026 23:56:00",
+        "desa_id": null,
+        "counter": 1,
+        "confidence": 70,
+        "confidence_level": "medium",
+        "kawasan": "",
+        "desa": "Maburai",
+        "kecamatan": "Murung Pudak",
+        "kabkota": "Tabalong",
+        "nama_provinsi": "Kalimantan Selatan",
+        "pulau": "",
+        "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           115.49854,
           -2.20878
         ]
@@ -1494,27 +1587,27 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          115.25803,
-          -3.84171
+          115.34616,
+          -2.15094
         ]
       },
       "properties": {
-        "hs_id": "2026-11-11T05:54:00.000000Z",
-        "date_hotspot_ori": "2026-11-11T05:54:00.000000Z",
+        "hs_id": "2026-11-11T16:56:00.000000Z",
+        "date_hotspot_ori": "2026-11-11T16:56:00.000000Z",
         "provinsi_id": 12,
-        "lat": -3.84171,
-        "long": 115.25803,
+        "lat": -2.15094,
+        "long": 115.34616,
         "sumber": "NASA-NOAA20",
         "ori_sumber": null,
-        "date_hotspot": "Rabu, 11 November 2026 12:54:00",
+        "date_hotspot": "Rabu, 11 November 2026 23:56:00",
         "desa_id": null,
         "counter": 1,
         "confidence": 70,
         "confidence_level": "medium",
         "kawasan": "",
-        "desa": "Kintap Kecil",
-        "kecamatan": "Kintap",
-        "kabkota": "Tanah Laut",
+        "desa": "Kelurahan Jangkung",
+        "kecamatan": "Tanjung",
+        "kabkota": "Tabalong",
         "nama_provinsi": "Kalimantan Selatan",
         "pulau": "",
         "route_create": "https://opsroom.sipongidata.my.id/daops/laporan/groundcheck/create/form"
